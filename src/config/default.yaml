@@ -1,0 +1,11 @@
+server : 
+  port : 8000
+
+db:
+  type: 'postgres'
+  port: 5432
+  database: 'board-app'
+
+jwt:
+  expriesIn: 3600
+  

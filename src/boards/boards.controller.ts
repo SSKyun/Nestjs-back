@@ -1,12 +1,17 @@
+import { User } from 'src/auth/user.entity';
+import { AuthGuard } from '@nestjs/passport';
 import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardsService } from './boards.service';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UsePipes, ValidationPipe, UseGuards, Logger } from '@nestjs/common';
 import {BoardStatus} from './board-status.enum';
 import { Board } from './board.entity';
+import { GetUser } from 'src/auth/get-user.decorator';
 
 @Controller('boards')
+@UseGuards(AuthGuard())
 export class BoardsController {
+    private logger = new Logger('BoardsController');
     private hi = "hi Sung"
 
     constructor(private boardsService:BoardsService){}
@@ -27,14 +32,19 @@ export class BoardsController {
     }
 
     @Get()
-    getAllBoard(): Promise<Board[]>{
-        return this.boardsService.getAllBoards();
+    getAllBoard(
+        @GetUser() user: User
+    ): Promise<Board[]>{
+        this.logger.verbose(`User ${user.username} trying to get all boards`);
+        return this.boardsService.getAllBoards(user);
     }
 
     @Post()
     @UsePipes(ValidationPipe)
-    createBoard(@Body() createBoardDto:CreateBoardDto): Promise<Board>{
-        return this.boardsService.createBoard(createBoardDto);
+    createBoard(@Body() createBoardDto:CreateBoardDto,
+    @GetUser() user:User): Promise<Board>{
+        this.logger.verbose(`User ${user.username} creating a new board. Payload Title : ${createBoardDto.title}`)
+        return this.boardsService.createBoard(createBoardDto,user);
     }
 
     @Get('/:id')
@@ -43,8 +53,9 @@ export class BoardsController {
     }
 
     @Delete('/:id')
-    deleteBoard(@Param('id', ParseIntPipe)id): Promise<void>{
-        return this.boardsService.deleteBoard(id);
+    deleteBoard(@Param('id', ParseIntPipe)id,
+    @GetUser() user:User): Promise<void>{
+        return this.boardsService.deleteBoard(id,user);
     }
 
     @Patch('/:id/status')

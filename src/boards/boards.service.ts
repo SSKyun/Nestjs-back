@@ -1,3 +1,4 @@
+import { User } from 'src/auth/user.entity';
 import { BoardRepository } from './board.repository';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { Get, Injectable, NotFoundException, Param } from '@nestjs/common';
@@ -14,26 +15,34 @@ export class BoardsService {
     ){}//boardservice안에서 repository 사용가능하게함.
 
 
-    async getAllBoards(): Promise<Board[]> {
-        return this.boardRepository.find();
-    }
+    async getAllBoards(
+        user:User
+    ): Promise<Board[]> {
+        const query = this.boardRepository.createQueryBuilder('board');
 
-    createBoard(createBoardDto:CreateBoardDto): Promise<Board> {
-        return this.boardRepository.createBoard(createBoardDto);
-    }
+        query.where('board.userId = :userId',{ userId : user.id });
 
-    async deleteBoard(id : number) : Promise<void>  {
-        const result = await this.boardRepository.delete(id);
+        const boards = await query.getMany();
         
+        return boards;
+        // return this.boardRepository.find();
+    }
+
+    createBoard(createBoardDto:CreateBoardDto, user: User): Promise<Board> {
+        return this.boardRepository.createBoard(createBoardDto,user);
+    }
+
+    async deleteBoard(id : number, user : User) : Promise<void>  {
+        const result = await this.boardRepository.delete({id,user});
         if(result.affected == 0){
-            throw new NotFoundException(`Can't find Board with id ${id}`);
+            throw new NotFoundException(`Can't find Board with id ${id} && ${user}`);
         }
         
         console.log('result',result);
     }
 
     async getBoardById(id: any): Promise <Board>{
-        const found = await this.boardRepository.findOneBy(id);
+        const found = await this.boardRepository.findOneBy({id});
 
         if(!found){
             throw new NotFoundException(`Can't find Board with id ${id}`);
@@ -48,43 +57,4 @@ export class BoardsService {
 
         return board;
     }
-
-    // private boards: Board[] = []; 로컬 메모리부분.
-
-    // getAllBoards(): Board[] {
-    //     return this.boards;
-    // }//전체 검색
-
-    // createBoard(createBoardDto:CreateBoardDto){
-    //     // const title = createBoardDto.title 아래와 동일.
-    //     const {title, description} = createBoardDto;
-    //     const board: Board = {
-    //         id: uuid(),//id가 unique한 값을 게시판의 아이디로 줄 수 있다.
-    //         title,//title: title,
-    //         description,//description : description,
-    //         status: BoardStatus.PUBLIC,
-    //     }
-    //     this.boards.push(board);
-    //     return board;
-    // }
-
-    // getBoardById(id: string): Board{
-    //     const found = this.boards.find((board)=> board.id === id);
-    //     if(!found){
-    //         throw new NotFoundException(`Can't find Board with id : ${id}`);
-    //     }
-    //     return found;
-    // }
-
-    // deleteBoard(id: string):void {
-    //     const found = this.getBoardById(id); //없는 게시물을 지우려할 때도 에러값 출력
-    //     this.boards = this.boards.filter((board)=>board.id !== found.id);
-    // }
-
-    // updateBoardStatus(id: string, status:BoardStatus): Board {
-    //     const board= this.getBoardById(id);
-    //     board.status = status;
-    //     return board;
-    // }
-
 }

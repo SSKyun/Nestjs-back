@@ -1,4 +1,4 @@
-import { Get } from "@nestjs/common/decorators";
+import { Get } from "@nestjs/common";
 import { OnModuleInit } from "@nestjs/common/interfaces";
 import { WebSocketGateway,SubscribeMessage, MessageBody, WebSocketServer } from "@nestjs/websockets";
 import { Server } from "socket.io";

@@ -7,10 +7,10 @@ export class AuthCredentialsDto{
     username : string;
 
     @IsString()
-    @MinLength(8)
+    @MinLength(4)
     @MaxLength(20)
-    //영어랑 숫자만 가능한 유효성 체크
-    @Matches(/^[a-zA-Z0-9]*s/,{
+    //영어 2개, 숫자, 특문 1개씩
+    @Matches(/(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$/,{
         message : 'password only accepts english and number'
     })
     password : string;
