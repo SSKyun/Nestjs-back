@@ -16,20 +16,20 @@ export class BoardsController {
 
     constructor(private boardsService:BoardsService){}
 
-    @Get("/hi")
-    getHi() : string {
-        return this.hi;
-    }
+    // @Get("/hi")
+    // getHi() : string {
+    //     return this.hi;
+    // }
 
-    @Post("/setbye")
-    setHi(@Body() body: {hi : string}) : {ok : boolean, message : string} {
-        this.hi = body.hi
-        console.log(body)
-        return {
-            ok : true,
-            message : "success"
-        }
-    }
+    // @Post("/setbye")
+    // setHi(@Body() body: {hi : string}) : {ok : boolean, message : string} {
+    //     this.hi = body.hi
+    //     console.log(body)
+    //     return {
+    //         ok : true,
+    //         message : "success"
+    //     }
+    // }
 
     @Get()
     getAllBoard(

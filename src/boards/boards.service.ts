@@ -22,10 +22,10 @@ export class BoardsService {
 
         query.where('board.userId = :userId',{ userId : user.id });
 
-        const boards = await query.getMany();
+        // const boards = await query.getMany(); 자신의 게시물만 가져오기
         
-        return boards;
-        // return this.boardRepository.find();
+        // // return boards;
+        return this.boardRepository.find();
     }
 
     createBoard(createBoardDto:CreateBoardDto, user: User): Promise<Board> {

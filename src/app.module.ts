@@ -5,11 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm/dist';
 import { BoardsModule } from './boards/boards.module';
 import { typeORMConfig } from './configs/typeorm.config';
 import { AuthModule } from './auth/auth.module';
+import { AppService } from './app.service';
+import { AppController } from './app.controller';
 
 
 @Module({
   imports: [GatewayModule,BoardsModule,TypeOrmModule.forRoot(typeORMConfig), AuthModule],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
