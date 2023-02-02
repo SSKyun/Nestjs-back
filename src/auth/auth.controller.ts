@@ -1,9 +1,12 @@
 import { GetUser } from './get-user.decorator';
 import { AuthCredentialsDto } from './dto/auth-credential.dto';
 import { AuthService } from './auth.service';
-import { Body, Controller, Post, Req, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Req, Res, UseGuards, ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from './user.entity';
+import { HttpCode } from '@nestjs/common/decorators/http/http-code.decorator';
+import { Request, Response } from 'express';
+import { RefreshTokenGuard } from './resreshToken.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -17,8 +20,9 @@ export class AuthController {
     }
 
     @Post('signin')
-    signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<{accessToken : string}>{
-        return this.authService.signIn(authCredentialsDto);
+     signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto, @Res({passthrough : true}) res : Response): Promise<{accessToken : string}>{
+        return this.authService.signIn(authCredentialsDto,res);
+
     }
 
     @Post('/test')
@@ -27,4 +31,16 @@ export class AuthController {
         console.log(user); //req.user 유저정보
     }
 
+    @Get('refresh')
+    refreshTokens(@Req() req: Request) {
+      return this.authService.refreshTokens(req);
+    }
+
+    @Get('/')
+    @UseGuards(AuthGuard())
+    authCheck(@GetUser() user: User){
+        console.log(user);
+        return user
+    }
+    
 }

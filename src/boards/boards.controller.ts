@@ -9,34 +9,19 @@ import { Board } from './board.entity';
 import { GetUser } from 'src/auth/get-user.decorator';
 
 @Controller('boards')
-@UseGuards(AuthGuard())
 export class BoardsController {
     private logger = new Logger('BoardsController');
     private hi = "hi Sung"
 
     constructor(private boardsService:BoardsService){}
 
-    // @Get("/hi")
-    // getHi() : string {
-    //     return this.hi;
-    // }
-
-    // @Post("/setbye")
-    // setHi(@Body() body: {hi : string}) : {ok : boolean, message : string} {
-    //     this.hi = body.hi
-    //     console.log(body)
-    //     return {
-    //         ok : true,
-    //         message : "success"
-    //     }
-    // }
-
+    @UseGuards(AuthGuard())
     @Get()
     getAllBoard(
-        @GetUser() user: User
+        // @GetUser() user: User
     ): Promise<Board[]>{
-        this.logger.verbose(`User ${user.username} trying to get all boards`);
-        return this.boardsService.getAllBoards(user);
+        // this.logger.verbose(`User ${user.username} trying to get all boards`);
+        return this.boardsService.getAllBoards(/* user */);
     }
 
     @Post()

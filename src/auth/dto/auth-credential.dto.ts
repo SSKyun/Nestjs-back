@@ -14,4 +14,6 @@ export class AuthCredentialsDto{
         message : 'password only accepts english and number'
     })
     password : string;
+
+    nickname : string;
 }

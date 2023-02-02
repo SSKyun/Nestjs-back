@@ -2,12 +2,14 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as config from 'config';
-
+import * as cookieParser from 'cookie-parser'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  console.log(process.env.JWT_REFRESH_SECRET)
   const serverConfig = config.get('server');
   const port = serverConfig.port;
-
+  app.use(cookieParser());
+  
   app.enableCors({
   origin : ["http://localhost:3000"],
   credentials: true

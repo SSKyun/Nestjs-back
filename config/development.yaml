@@ -5,4 +5,8 @@ db:
   synchronize: true
 
 jwt:
-  secret: 'Secret1234'
+  secret: 'SungKyun24'
+  refresh : "C+usCJwsTbqg4hXTBAttTQ9rbXrIc/XKB0kUoL5ca2/ZA+pjx+wIkIPl1PJI1tyWC8xdQJFCqE1jtL+pE/DfRW2LP/rQsbUKGF8bM4S50iDZmQFhb4hiLF7Ko9o87Dzu9TB0Lje1JrIh2uxLTT5NGTNfiWwhCyEPlD8zxVp4DYXfTmRWa1gAQtnKEfrdrLkBNewH1Lj4UrQw1HOk2WPMs4vHsY0H3lQf/zaTEo90E7QX2j8u7iLyL70tHNZzqMguzqT1fm1IPdvyKR0S+iPKYQU7LWllHSS2vU5x9UMY6rdNlMNZxao9kLOelqzSmrlcJBI8ZCV0jlDc1556yQ6BSw=="
+
+kakao:
+  callbackURL:''

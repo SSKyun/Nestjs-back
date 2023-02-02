@@ -8,4 +8,8 @@ db:
 
 jwt:
   expriesIn: 60 * 60
+
+kakao:
+  clientID:''
+
   
