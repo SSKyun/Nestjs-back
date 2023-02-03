@@ -6,7 +6,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { User } from './user.entity';
 import { HttpCode } from '@nestjs/common/decorators/http/http-code.decorator';
 import { Request, Response } from 'express';
-import { RefreshTokenGuard } from './resreshToken.guard';
+import { RefreshTokenGuard } from './guard/resreshToken.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -23,12 +23,6 @@ export class AuthController {
      signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto, @Res({passthrough : true}) res : Response): Promise<{accessToken : string}>{
         return this.authService.signIn(authCredentialsDto,res);
 
-    }
-
-    @Post('/test')
-    @UseGuards(AuthGuard())
-    test(@GetUser() user:User){
-        console.log(user); //req.user 유저정보
     }
 
     @Get('refresh')

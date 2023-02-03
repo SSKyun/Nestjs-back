@@ -28,7 +28,7 @@ export class BoardsController {
     @UsePipes(ValidationPipe)
     createBoard(@Body() createBoardDto:CreateBoardDto,
     @GetUser() user:User): Promise<Board>{
-        this.logger.verbose(`User ${user.username} creating a new board. Payload Title : ${createBoardDto.title}`)
+        //this.logger.verbose(`User ${user.username} creating a new board. Payload Title : ${createBoardDto.title}`)
         return this.boardsService.createBoard(createBoardDto,user);
     }
 

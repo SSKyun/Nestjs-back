@@ -7,8 +7,8 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import * as config from 'config';
-import { RefreshTokenStrategy } from './refreshToken.strategy';
-import { AccessTokenStrategy } from './accessToken,strategy';
+import { RefreshTokenStrategy } from './token/refreshToken.strategy';
+import { AccessTokenStrategy } from './token/accessToken,strategy';
 import { ConfigModule } from '@nestjs/config';
 
 const jwtConfig = config.get('jwt');
