@@ -20,10 +20,20 @@ export class AuthController {
     }
 
     @Post('signin')
-     signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto, @Res({passthrough : true}) res : Response): Promise<{accessToken : string}>{
+    signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto, @Res({passthrough : true}) res : Response): Promise<{accessToken : string}>{
         return this.authService.signIn(authCredentialsDto,res);
 
     }
+    @Post('/logout')
+    logout(@Req() req: Request, @Res() res: Response): any {
+    res.cookie('jwt', '', {
+        maxAge: 0,
+        httpOnly : true
+    })
+    return res.send({
+        message: 'success'
+    })
+}
 
     @Get('refresh')
     refreshTokens(@Req() req: Request) {

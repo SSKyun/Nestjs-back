@@ -11,7 +11,6 @@ import { GetUser } from 'src/auth/get-user.decorator';
 @Controller('boards')
 export class BoardsController {
     private logger = new Logger('BoardsController');
-    private hi = "hi Sung"
 
     constructor(private boardsService:BoardsService){}
 

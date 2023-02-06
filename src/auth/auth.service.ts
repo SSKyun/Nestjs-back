@@ -102,7 +102,7 @@ export class AuthService {
                 httpOnly : true
             })
             // refreshToken -> client http only cookie 
-            return {accessToken}
+            return {accessToken,username}
         }else{
             throw new UnauthorizedException('login failed')
         }
