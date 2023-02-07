@@ -2,14 +2,12 @@ server :
   port : 8000
 
 db:
-  type: 'postgres'
-  port: 5432
-  database: 'board-app'
+  type: 'mysql'
+  port: 3306
+  database: 'test'
 
 jwt:
   expriesIn: 60 * 60
 
-kakao:
-  clientID:''
 
   
