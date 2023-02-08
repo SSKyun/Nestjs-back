@@ -26,10 +26,10 @@ export class AuthController {
     }
     @Post('/logout')
     logout(@Req() req: Request, @Res() res: Response): any {
-    res.cookie('jwt', '', {
+    res.cookie('refreshToken', '', {
         maxAge: 0,
         httpOnly : true
-    })
+    });
     return res.send({
         message: 'success'
     })

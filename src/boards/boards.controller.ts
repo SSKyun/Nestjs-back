@@ -1,3 +1,4 @@
+import { AccessTokenGuard } from './../auth/guard/accessToken.guard';
 import { User } from 'src/auth/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe';
@@ -13,8 +14,6 @@ export class BoardsController {
     private logger = new Logger('BoardsController');
 
     constructor(private boardsService:BoardsService){}
-
-    @UseGuards(AuthGuard())
     @Get()
     getAllBoard(
         // @GetUser() user: User
@@ -23,6 +22,7 @@ export class BoardsController {
         return this.boardsService.getAllBoards(/* user */);
     }
 
+    @UseGuards(AccessTokenGuard)
     @Post()
     @UsePipes(ValidationPipe)
     createBoard(@Body() createBoardDto:CreateBoardDto,

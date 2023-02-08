@@ -7,6 +7,8 @@ import { typeORMConfig } from './configs/typeorm.config';
 import { AuthModule } from './auth/auth.module';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
+import { ClientsModule } from '@nestjs/microservices';
+import { Transport } from '@nestjs/microservices/enums';
 
 
 @Module({
