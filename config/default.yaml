@@ -4,7 +4,7 @@ server :
 db:
   type: 'mysql'
   port: 3306
-  database: 'test'
+  database: "evastick_db"
 
 jwt:
   expriesIn: 60 * 60

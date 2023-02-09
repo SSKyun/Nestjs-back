@@ -5,7 +5,7 @@ import { User } from 'src/auth/user.entity';
 @Entity()
 export class Board extends BaseEntity { 
     @PrimaryGeneratedColumn()
-    id:Number;
+    id:number;
 
     @Column()
     title: string;

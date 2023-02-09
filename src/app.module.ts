@@ -9,10 +9,11 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { ClientsModule } from '@nestjs/microservices';
 import { Transport } from '@nestjs/microservices/enums';
+import { IrrigationModule } from './irrigation/irrigation.module';
 
 
 @Module({
-  imports: [GatewayModule,BoardsModule,TypeOrmModule.forRoot(typeORMConfig), AuthModule],
+  imports: [GatewayModule,BoardsModule,TypeOrmModule.forRoot(typeORMConfig), AuthModule, IrrigationModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -10,43 +10,44 @@ import { Board } from './board.entity';
 import { GetUser } from 'src/auth/get-user.decorator';
 
 @Controller('boards')
+//@UseGuards(AuthGuard())
 export class BoardsController {
-    private logger = new Logger('BoardsController');
+    private logger = new Logger('Boards');
+    constructor(private boardsService: BoardsService) { }
 
-    constructor(private boardsService:BoardsService){}
     @Get()
     getAllBoard(
-        // @GetUser() user: User
-    ): Promise<Board[]>{
-        // this.logger.verbose(`User ${user.username} trying to get all boards`);
-        return this.boardsService.getAllBoards(/* user */);
+        @GetUser() user: User
+    ): Promise<Board[]> {
+        //this.logger.verbose(`User ${user.username} trying to get all boards`);
+        return this.boardsService.getAllBoards();
     }
 
-    @UseGuards(AccessTokenGuard)
     @Post()
     @UsePipes(ValidationPipe)
-    createBoard(@Body() createBoardDto:CreateBoardDto,
-    @GetUser() user:User): Promise<Board>{
-        //this.logger.verbose(`User ${user.username} creating a new board. Payload Title : ${createBoardDto.title}`)
-        return this.boardsService.createBoard(createBoardDto,user);
+    createBoard(@Body() createBoardDto: CreateBoardDto,
+    @GetUser() user:User): Promise<Board> {
+        //this.logger.verbose(`User ${user.username} creating a new board. Payload: ${JSON.stringify(createBoardDto)} `)
+        return this.boardsService.createBoard(createBoardDto, user);
     }
 
     @Get('/:id')
-    getBoardById(@Param('id') id:number) : Promise<Board>{
+    getBoardById(@Param('id') id: number): Promise<Board> {
         return this.boardsService.getBoardById(id);
     }
 
     @Delete('/:id')
-    deleteBoard(@Param('id', ParseIntPipe)id,
-    @GetUser() user:User): Promise<void>{
-        return this.boardsService.deleteBoard(id,user);
+    deleteBoard(@Param('id', ParseIntPipe) id,
+    @GetUser() user:User
+    ): Promise<void> {
+        return this.boardsService.deleteBoard(id, user);
     }
 
     @Patch('/:id/status')
     updateBoardStatus(
-        @Param('id',ParseIntPipe) id: number,
-        @Body('status',BoardStatusValidationPipe) status: BoardStatus
-    ){
-        return this.boardsService.updateBoardStatus(id,status)
+        @Param('id', ParseIntPipe) id: number,
+        @Body('status', BoardStatusValidationPipe) status: BoardStatus
+    ) {
+        return this.boardsService.updateBoardStatus(id, status);
     }
 }
