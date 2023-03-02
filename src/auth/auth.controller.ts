@@ -23,7 +23,7 @@ export class AuthController {
     @Post('/signin')
     signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto, @Res({passthrough : true}) res : Response): Promise<{accessToken : string}>{
         return this.authService.signIn(authCredentialsDto,res);
-    }
+    }//
 
     @Post('/logout')
     logout(@Req() req: Request, @Res() res: Response): any {
