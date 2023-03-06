@@ -30,7 +30,7 @@ export class CreateButtonDto {
     s_min : string;
 
     @IsNotEmpty()
-    on_time : string;
+    on_time : number;
 
     @IsNotEmpty()
     line_1 : Boolean;

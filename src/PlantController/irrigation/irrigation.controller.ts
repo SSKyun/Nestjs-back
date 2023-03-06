@@ -28,13 +28,14 @@ export class IrrigationController {
         return this.irrigationService.createIrrigationButton(createbuttonDto, req.user);
     }
 
-    @Delete('/:id')
+    @Delete(':id')
     deleteIrrigation(@Param('id',ParseIntPipe)id:number):Promise<void>{
         return this.irrigationService.deleteIrrigation(id);
     }
 
-    @Put('/:id')
+    @Patch(':id')
     update(@Param('id')id:number,@Body()irrigationEntity:IrrigationEntity){
         return this.irrigationService.update(id,irrigationEntity);
     }
+
 }

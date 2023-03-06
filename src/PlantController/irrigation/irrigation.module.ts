@@ -3,10 +3,12 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { IrrigationController } from './irrigation.controller';
 import { IrrigationService } from './irrigation.service';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports : [
-    TypeOrmModule.forFeature([IrrigationRepository])
+    TypeOrmModule.forFeature([IrrigationRepository]),
+    ScheduleModule.forRoot(),
   ],
   controllers: [IrrigationController],
   providers: [IrrigationService,IrrigationRepository]

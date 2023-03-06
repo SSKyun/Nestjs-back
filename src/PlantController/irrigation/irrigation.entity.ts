@@ -1,4 +1,4 @@
-import {BaseEntity,PrimaryGeneratedColumn,Column, Entity, ManyToOne, CreateDateColumn} from "typeorm";
+import {BaseEntity,PrimaryGeneratedColumn,Column, Entity, ManyToOne, CreateDateColumn, UpdateDateColumn, BeforeUpdate} from "typeorm";
 import { User } from 'src/auth/user.entity';
 
 @Entity()
@@ -34,7 +34,7 @@ export class IrrigationEntity extends BaseEntity {
     s_min : string;
 
     @Column()
-    on_time : string;
+    on_time : number;
 
     @Column({ default : false})
     line_1 : Boolean;
@@ -48,6 +48,22 @@ export class IrrigationEntity extends BaseEntity {
     @Column({ default : false})
     onoff : Boolean;
 
+    @CreateDateColumn()
+    createDate : Date;
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    updatedAt: Date;
+
+    @BeforeUpdate()
+    updateTimestamp() {
+        this.updatedAt = new Date();
+    }
+
+    async save(): Promise<this> {
+        this.updatedAt = new Date();
+        return super.save();
+    }
+    
     @ManyToOne(type=>User, user=>user.irrigations,{eager : false})
     user: User;
 }

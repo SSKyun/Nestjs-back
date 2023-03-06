@@ -1,5 +1,5 @@
 import { AccessTokenGuard } from '../../auth/guard/accessToken.guard';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { CreatePesticideDto } from "./dto/create-button.dto";
 import { PesticideEntity } from "./pesticide.entity";
 import { PesticideService } from "./pesticide.service";
@@ -29,7 +29,7 @@ export class PesticideController {
         return this.pesticideService.deletePesticide(id);
     }
 
-    @Put('/:id')
+    @Patch('/:id')
     update(@Param('id')id:number, @Body()pesticideEntity:PesticideEntity){
         return this.pesticideService.update(id,pesticideEntity);
     }

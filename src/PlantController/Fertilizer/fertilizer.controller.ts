@@ -1,5 +1,5 @@
 import { AccessTokenGuard } from 'src/auth/guard/accessToken.guard';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { CreateFertilizerDto } from './dto/create-button.dto';
 import { Request } from 'express';
 import { FertilizerService } from './fertilizer.service';
@@ -29,7 +29,7 @@ export class FertilizerController {
         return this.fertilizerService.deleteFertilizer(id);
     }
 
-    @Put('/:id')
+    @Patch('/:id')
     update(@Param('id')id:number,@Body()fertilizerEntity:FertilizerEntity){
         return this.fertilizerService.update(id,fertilizerEntity);
     }

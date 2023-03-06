@@ -1,5 +1,5 @@
 import { User } from "src/auth/user.entity";
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, BeforeUpdate, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class FertilizerEntity extends BaseEntity {
@@ -47,6 +47,19 @@ export class FertilizerEntity extends BaseEntity {
 
     @Column({ default : false})
     onoff : Boolean;
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    updatedAt: Date;
+
+    @BeforeUpdate()
+    updateTimestamp() {
+        this.updatedAt = new Date();
+    }
+
+    async save(): Promise<this> {
+        this.updatedAt = new Date();
+        return super.save();
+    }
 
     @ManyToOne(type=>User, user=>user.fertilizers,{eager : false})
     user: User;

@@ -1,5 +1,5 @@
 import { User } from 'src/auth/user.entity';
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, BeforeUpdate, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class PesticideEntity extends BaseEntity{
@@ -47,6 +47,17 @@ export class PesticideEntity extends BaseEntity{
 
     @Column({ default : false})
     onoff : Boolean;
+
+    @CreateDateColumn()
+    createDate : Date;
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    updatedAt: Date;
+
+    @BeforeUpdate()
+    updateTimestamp() {
+        this.updatedAt = new Date();
+    }
 
     @ManyToOne(type=>User, user=>user.pesticides,{eager : false})
     user: User;
