@@ -49,11 +49,8 @@ export class BoardsController {
         return this.boardsService.deleteBoard2(id);
     }
 
-    @Patch('/:id/status')
-    updateBoardStatus(
-        @Param('id', ParseIntPipe) id: number,
-        @Body('status', BoardStatusValidationPipe) status: BoardStatus
-    ) {
-        return this.boardsService.updateBoardStatus(id, status);
+    @Patch('/:id')
+    update(@Param('id')id:number,@Body()board:Board){
+        return this.boardsService.update(id,board);
     }
 }

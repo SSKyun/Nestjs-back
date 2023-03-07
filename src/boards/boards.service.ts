@@ -56,12 +56,12 @@ export class BoardsService {
         }
         return found;
     }
+    async update(id:number,board:Board):Promise<void>{
+        const update = await this.boardRepository.findOneBy({id});
+        update.title = board.title;
+        update.description = board.description;
+        update.status = board.status;
 
-    async updateBoardStatus(id: number, status: BoardStatus) : Promise<Board> {
-        const board = await this.getBoardById(id);
-        board.status = status;
-        await this.boardRepository.save(board);
-
-        return board;
+        await this.boardRepository.save(update);
     }
 }

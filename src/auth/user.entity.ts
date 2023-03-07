@@ -24,7 +24,7 @@ export class User extends BaseEntity {
     @CreateDateColumn()
     createDate : Date;
 
-    @Column({nullable:true})
+    @Column()
     phone_number : string;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
