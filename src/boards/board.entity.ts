@@ -1,5 +1,5 @@
 import { BoardStatus } from './board-status.enum';
-import {BaseEntity,PrimaryGeneratedColumn,Column, Entity, ManyToOne, CreateDateColumn} from "typeorm";
+import {BaseEntity,PrimaryGeneratedColumn,Column, Entity, ManyToOne, CreateDateColumn, BeforeUpdate} from "typeorm";
 import { User } from 'src/auth/user.entity';
 
 @Entity()
@@ -14,10 +14,23 @@ export class Board extends BaseEntity {
     description: string;
 
     @Column()
-    status: BoardStatus;
+    status: string;
 
     @CreateDateColumn()
     createDate : Date;
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    updatedAt: Date;
+
+    @BeforeUpdate()
+    updateTimestamp() {
+        this.updatedAt = new Date();
+    }
+
+    async save(): Promise<this> {
+        this.updatedAt = new Date();
+        return super.save();
+    }
 
     @ManyToOne(type => User, user => user.boards, {eager: false})
     user: User;

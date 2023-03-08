@@ -11,15 +11,15 @@ export class BoardRepository extends Repository<Board> {
         super(Board, dataSource.createEntityManager());
     }
     async createBoard(createBoardDto:CreateBoardDto, user:{[key : string] : any}): Promise<Board> {
-        const user1 = await User.findOneBy({id : user['sub']})
+        const user1 = await User.findOneBy({id : user['sub']});
         
-        const { title, description} = createBoardDto;
+        const { title, description,status} = createBoardDto;
         const board = this.create({
             title,
             description,
-            status: BoardStatus.PUBLIC,
+            status,
             user : user1
-        })
+        });
         
         await this.save(board);
         return board;

@@ -49,8 +49,10 @@ export class BoardsController {
         return this.boardsService.deleteBoard2(id);
     }
 
-    @Patch('/:id')
+    @Patch('/:id') //게시글 수정
     update(@Param('id')id:number,@Body()board:Board){
         return this.boardsService.update(id,board);
     }
+    
+
 }

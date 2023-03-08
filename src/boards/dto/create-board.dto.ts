@@ -5,6 +5,8 @@ export class CreateBoardDto {
     @MinLength(2)
     title: string;
     
-    @IsNotEmpty()
+    @MinLength(1)
     description : string;
+
+    status : string;
 }
