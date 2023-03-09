@@ -44,4 +44,7 @@ export class CreateButtonDto {
     @IsNotEmpty()
     onoff : Boolean;
 
+    @IsNotEmpty()
+    set_time : number;
+
 }

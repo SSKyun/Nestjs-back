@@ -25,7 +25,7 @@ export class BoardsService {
         // const boards = await query.getMany(); 자신의 게시물만 가져오기
         
         // // return boards;
-        return this.boardRepository.find();
+        return this.boardRepository.find({relations:['user']});
     }
 
     createBoard(createBoardDto : CreateBoardDto, user:{[key : string] : any}): Promise<Board> {

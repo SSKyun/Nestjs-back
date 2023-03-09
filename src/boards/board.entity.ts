@@ -13,7 +13,7 @@ export class Board extends BaseEntity {
     @Column()
     description: string;
 
-    @Column()
+    @Column({default : "PUBLIC"})
     status: string;
 
     @CreateDateColumn()
