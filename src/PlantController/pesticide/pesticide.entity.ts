@@ -59,6 +59,14 @@ export class PesticideEntity extends BaseEntity{
         this.updatedAt = new Date();
     }
 
+    @Column()
+    set_time : number;
+
+    async save(): Promise<this> {
+        this.updatedAt = new Date();
+        return super.save();
+    }
+
     @ManyToOne(type=>User, user=>user.pesticides,{eager : false})
     user: User;
 }

@@ -48,12 +48,16 @@ export class BoardsService {
         console.log('result',result);
     }
 
-    async getBoardById(id: any): Promise <Board>{
-        const found = await this.boardRepository.findOneBy({id});
-
+    async getBoardById(id: any): Promise<Board> {
+        const found = await this.boardRepository.findOne({ 
+          where: { id }, 
+          relations: ['user'] 
+        });
+      
         if(!found){
-            throw new NotFoundException(`Can't find Board with id ${id}`);
+          throw new NotFoundException(`Can't find Board with id ${id}`);
         }
+      
         return found;
     }
     async update(id:number,board:Board):Promise<void>{

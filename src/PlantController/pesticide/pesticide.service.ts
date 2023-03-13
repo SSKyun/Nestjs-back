@@ -3,13 +3,30 @@ import { CreatePesticideDto } from './dto/create-button.dto';
 import { InjectRepository } from "@nestjs/typeorm";
 import { PesticideRepository } from "./pesticide.repository";
 import { Injectable } from '@nestjs/common';
+import { connect } from 'node-nats-streaming';
 
 @Injectable()
 export class PesticideService{
+    private natsClient: any;
+
     constructor(
         @InjectRepository(PesticideRepository)
         private pesticideRepository : PesticideRepository,
-    ){}
+    ){
+        this.connectNats();
+    }
+
+    async connectNats() {
+        this.natsClient = connect('cluster-name', 'client-id', {
+          url: 'nats://localhost:8000',
+        });
+        this.natsClient.on('connect', () => {
+          console.log('Connected to NATS');
+        });
+        this.natsClient.on('error', (err: any) => {
+          console.log(`NATS error: ${err}`);
+        });
+      }
 
     async getAllpesticide(
         user:{[key:string]:any}

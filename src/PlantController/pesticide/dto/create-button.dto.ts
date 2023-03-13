@@ -43,4 +43,7 @@ export class CreatePesticideDto {
 
     @IsNotEmpty()
     onoff : Boolean;
+
+    @IsNotEmpty()
+    set_time : number;
 }
