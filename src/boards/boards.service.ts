@@ -1,5 +1,5 @@
 import { User } from 'src/auth/user.entity';
-import { BoardRepository } from './board.repository';
+import { BoardRepository } from './boards.repository';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { Get, Injectable, NotFoundException, Param } from '@nestjs/common';
 import { v1 as uuid } from 'uuid'; // npm i uuid --save
@@ -13,6 +13,10 @@ export class BoardsService {
         @InjectRepository(BoardRepository)
         private boardRepository : BoardRepository,
     ){}//boardservice안에서 repository 사용가능하게함.
+
+    async findOne(id:number): Promise<Board>{
+        return this.boardRepository.findOneBy({id});
+    }
 
 
     async getAllBoards(
@@ -44,8 +48,6 @@ export class BoardsService {
 
     async deleteBoard2(id:number):Promise<void>{
         const result = await this.boardRepository.delete(id);
-
-        console.log('result',result);
     }
 
     async getBoardById(id: any): Promise<Board> {

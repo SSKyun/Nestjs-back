@@ -5,6 +5,7 @@ import { BeforeUpdate, CreateDateColumn, Entity, Index, OneToMany, Unique, Updat
 import { BaseEntity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { FertilizerEntity } from 'src/PlantController/Fertilizer/fertilizer.entity';
 import { minLength } from 'class-validator';
+import { Comment } from 'src/comments/comment.entity';
 
 @Entity()
 @Unique(["username"])
@@ -42,6 +43,9 @@ export class User extends BaseEntity {
 
     @OneToMany(type => Board, board => board.user, { eager: true })
     boards: Board[]
+
+    @OneToMany(type => Comment,comment => comment.user, { eager : true })
+    comments : Comment[]
 
     @OneToMany(type=> IrrigationEntity,irrigation => irrigation.user, {eager : true})
     irrigations : IrrigationEntity[]

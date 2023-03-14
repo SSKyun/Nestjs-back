@@ -12,6 +12,7 @@ import { ClientsModule } from '@nestjs/microservices';
 import { Transport } from '@nestjs/microservices/enums';
 import { IrrigationModule } from './PlantController/irrigation/irrigation.module';
 import { PesticideModule } from './PlantController/pesticide/pesticide.module';
+import { CommentsModule } from './comments/comments.module';
 
 
 @Module({
@@ -21,6 +22,7 @@ import { PesticideModule } from './PlantController/pesticide/pesticide.module';
     IrrigationModule,
     PesticideModule,
     FertilizerModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

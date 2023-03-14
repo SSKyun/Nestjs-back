@@ -13,7 +13,6 @@ import { Request } from 'express';
 @Controller('boards')
 @UseGuards(AccessTokenGuard)
 export class BoardsController {
-    private logger = new Logger('Boards');
     constructor(private boardsService: BoardsService) { }
 
     @Get()
