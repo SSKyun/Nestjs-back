@@ -24,10 +24,10 @@ export class CreateButtonDto {
     sat_day : Boolean
 
     @IsNotEmpty()
-    s_hour : string;
+    s_hour : number;
     
     @IsNotEmpty()
-    s_min : string;
+    s_min : number;
 
     @IsNotEmpty()
     on_time : number;

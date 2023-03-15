@@ -28,10 +28,10 @@ export class IrrigationEntity extends BaseEntity {
     sat_day : Boolean
 
     @Column()
-    s_hour : string;
+    s_hour : number;
     
     @Column()
-    s_min : string;
+    s_min : number;
 
     @Column()
     on_time : number;

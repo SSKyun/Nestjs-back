@@ -14,28 +14,33 @@ import { Delete, Param, Patch, Put } from '@nestjs/common/decorators';
 export class IrrigationController {
     constructor(private irrigationService: IrrigationService) { }
 
-    @Get()
-    getAllButton(
-        @Req() req : Request
-    ): Promise<IrrigationEntity[]>{
-        return this.irrigationService.getAllButtons(req.user);
+    @Post('schedule')
+    async startSchedule(): Promise<void> {
+        await this.irrigationService.startSchedule();
     }
 
-    @Post()
-    @UsePipes(ValidationPipe)
-    createIrrigationButton(@Body() createbuttonDto: CreateButtonDto,
-    @Req() req:Request): Promise<IrrigationEntity>{
-        return this.irrigationService.createIrrigationButton(createbuttonDto, req.user);
-    }
+    // @Get()
+    // getAllButton(
+    //     @Req() req : Request
+    // ): Promise<IrrigationEntity[]>{
+    //     return this.irrigationService.getAllButtons(req.user);
+    // }
 
-    @Delete(':id')
-    deleteIrrigation(@Param('id',ParseIntPipe)id:number):Promise<void>{
-        return this.irrigationService.deleteIrrigation(id);
-    }
+    // @Post()
+    // @UsePipes(ValidationPipe)
+    // createIrrigationButton(@Body() createbuttonDto: CreateButtonDto,
+    // @Req() req:Request): Promise<IrrigationEntity>{
+    //     return this.irrigationService.createIrrigationButton(createbuttonDto, req.user);
+    // }
 
-    @Patch(':id')
-    update(@Param('id')id:number,@Body()irrigationEntity:IrrigationEntity){
-        return this.irrigationService.update(id,irrigationEntity);
-    }
+    // @Delete(':id')
+    // deleteIrrigation(@Param('id',ParseIntPipe)id:number):Promise<void>{
+    //     return this.irrigationService.deleteIrrigation(id);
+    // }
+
+    // @Patch(':id')
+    // update(@Param('id')id:number,@Body()irrigationEntity:IrrigationEntity){
+    //     return this.irrigationService.update(id,irrigationEntity);
+    // }
 
 }
