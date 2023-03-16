@@ -30,6 +30,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/platform-socket.io": "^9.2.1",
     "@nestjs/schedule": "^2.2.0",
+    "@nestjs/swagger": "^6.2.1",
     "@nestjs/typeorm": "^9.0.1",
     "@nestjs/websockets": "^9.2.1",
     "@types/passport-jwt": "^3.0.8",
@@ -40,6 +41,7 @@
     "class-validator": "^0.14.0",
     "config": "^3.3.9",
     "cookie-parser": "^1.4.6",
+    "google-protobuf": "^3.21.2",
     "mqtt": "^4.3.7",
     "mysql2": "^3.1.2",
     "nats": "^2.13.0",
@@ -53,6 +55,7 @@
     "rxjs": "^7.2.0",
     "socket.io-client": "^4.5.4",
     "ssh2": "^1.11.0",
+    "swagger-ui-express": "^4.6.2",
     "typeorm": "^0.3.11",
     "uuid": "^9.0.0"
   },

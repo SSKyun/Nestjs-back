@@ -19,24 +19,24 @@ export class IrrigationController {
         await this.irrigationService.startSchedule();
     }
 
-    // @Get()
-    // getAllButton(
-    //     @Req() req : Request
-    // ): Promise<IrrigationEntity[]>{
-    //     return this.irrigationService.getAllButtons(req.user);
-    // }
+    @Get()
+    getAllButton(
+        @Req() req : Request
+    ): Promise<IrrigationEntity[]>{
+        return this.irrigationService.getAllButtons(req.user);
+    }
 
-    // @Post()
-    // @UsePipes(ValidationPipe)
-    // createIrrigationButton(@Body() createbuttonDto: CreateButtonDto,
-    // @Req() req:Request): Promise<IrrigationEntity>{
-    //     return this.irrigationService.createIrrigationButton(createbuttonDto, req.user);
-    // }
+    @Post()
+    @UsePipes(ValidationPipe)
+    createIrrigationButton(@Body() createbuttonDto: CreateButtonDto,
+    @Req() req:Request): Promise<IrrigationEntity>{
+        return this.irrigationService.createIrrigationButton(createbuttonDto, req.user);
+    }
 
-    // @Delete(':id')
-    // deleteIrrigation(@Param('id',ParseIntPipe)id:number):Promise<void>{
-    //     return this.irrigationService.deleteIrrigation(id);
-    // }
+    @Delete(':id')
+    deleteIrrigation(@Param('id',ParseIntPipe)id:number):Promise<void>{
+        return this.irrigationService.deleteIrrigation(id);
+    }
 
     // @Patch(':id')
     // update(@Param('id')id:number,@Body()irrigationEntity:IrrigationEntity){

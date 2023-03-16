@@ -48,6 +48,9 @@ export class IrrigationEntity extends BaseEntity {
     @Column({ default : false})
     onoff : Boolean;
 
+    @Column({ nullable: true, type: 'simple-json' })
+    intervalId: NodeJS.Timeout;
+
     @CreateDateColumn()
     createDate : Date;
 
@@ -66,6 +69,9 @@ export class IrrigationEntity extends BaseEntity {
         this.updatedAt = new Date();
         return super.save();
     }
+
+    @Column({type:'int', nullable : true})
+    accumulatedTime:number;
     
     @ManyToOne(type=>User, user=>user.irrigations,{eager : false})
     user: User;

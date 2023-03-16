@@ -5,12 +5,12 @@ import * as config from 'config';
 import * as cookieParser from 'cookie-parser'
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { Transport } from '@nestjs/microservices/enums';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  console.log(process.env.JWT_REFRESH_SECRET)
   const serverConfig = config.get('server');
   const port = serverConfig.port;
   app.use(cookieParser());

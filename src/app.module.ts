@@ -13,6 +13,7 @@ import { Transport } from '@nestjs/microservices/enums';
 import { IrrigationModule } from './PlantController/irrigation/irrigation.module';
 import { PesticideModule } from './PlantController/pesticide/pesticide.module';
 import { CommentsModule } from './comments/comments.module';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 
 @Module({
