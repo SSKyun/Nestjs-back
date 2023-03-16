@@ -17,6 +17,7 @@ export class IrrigationService {
     @InjectRepository(IrrigationRepository)
     private irrigationRepository: IrrigationRepository,
   ) {
+    this.natsClient = null; // 선언만 하고 초기화는 connectNats() 메소드에서 처리
     this.connectNats();
   }
 
@@ -55,6 +56,8 @@ export class IrrigationService {
   }
 
   async startSchedule() {
+    try{
+    console.log("startSchedule 실행중...")
     const irrigations = await this.irrigationRepository.find();
     for (const irrigation of irrigations) {
       const daysOfWeek = [
@@ -73,77 +76,46 @@ export class IrrigationService {
       const line3 = irrigation.line_3;
       const startHour = irrigation.s_hour;
       const startMinute = irrigation.s_min;
-      let onoff = irrigation.onoff !== undefined ? irrigation.onoff : false; // onoff값 초기화
-      let accumulatedTime = irrigation.onoff ? irrigation.on_time : 0; // 총 작동 시간 초기화
-
-      // intervalId를 irrigation 객체에 저장합니다.
-      irrigation.intervalId = setInterval(() => {
-        const now = new Date();
-        const currentDay = now.getDay();
-        const startTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), startHour, startMinute, 0, 0);
-        if (daysOfWeek[currentDay] && now >= startTime) {
-          const end = new Date(startTime.getTime() + onTime * 60 * 1000);
-          const duration = setTime * 60 * 1000;
-
-          const job = () => {
-            console.log("job 호출")
-            if (onoff === false || accumulatedTime >= 0) { // 양수인 경우에만 작동
-              onoff = true;
-              const message = {
-                id: irrigation.id,
-                line1,
-                line2,
-                line3,
-                onoff,
-              };
-              this.natsClient.publish('irrigation', JSON.stringify(message));
-              accumulatedTime += onTime;
-              irrigation.accumulatedTime = accumulatedTime; // accumulatedTime으로 저장합니다.
-              this.irrigationRepository.save(irrigation);
-              console.log('onoff 값이 변경되었습니다. 현재 값:', onoff);
-            } else {
-              onoff = false;
-              const message = {
-                id: irrigation.id,
-                line1,
-                line2,
-                line3,
-                onoff,
-              };
-              console.log('onoff 값이 변경되었습니다. 현재 값:', onoff);
-              this.natsClient.publish('irrigation', JSON.stringify(message));
-            }
-          }
-
-          // duration 마다 job 함수를 실행합니다.
-          const intervalId = setInterval(() => {
-            job();
-            if (accumulatedTime >= duration) {
-              clearInterval(intervalId); // duration 이후 interval을 멈춥니다.
-            }
-          }, 30 * 1000);
-
-          // 30초 간격으로 job 함수를 실행합니다.
-          setInterval(() => {
-            job();
-          }, 30 * 1000);
-
-        } else {
-          clearInterval(irrigation.intervalId); // 해당 irrigation의 interval을 멈춥니다.
-          irrigation.intervalId = null; // intervalId를 초기화합니다.
-          irrigation.accumulatedTime = 0;
-        }
-      }, 1000);
+      let onoff = irrigation.onoff || false; // 기본값 false
+      let accumulatedTime = irrigation.accumulated_time || 0; // 기본값 0
+    
+      // 현재 시간을 기준으로 요일과 시간이 일치하고, onoff가 false인 경우 실행
+      const now = new Date();
+      const currentDayOfWeek = now.getDay();
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+    
+      if (
+        daysOfWeek[currentDayOfWeek] &&
+        currentHour === startHour &&
+        currentMinute === startMinute &&
+        !onoff
+      ) {
+        console.log(`Starting irrigation ${irrigation.id}`);
+        // TODO: 라즈베리파이 GPIO를 이용하여 라인 출력
+        onoff = true;
+        irrigation.onoff = onoff; // 값 저장
+        irrigation.accumulated_time = accumulatedTime;
+        await this.irrigationRepository.save(irrigation);
+      }
+    
+      if (onoff && accumulatedTime >= setTime) {
+        console.log(`Stopping irrigation ${irrigation.id}`);
+        // TODO: 라즈베리파이 GPIO를 이용하여 라인 정지
+        onoff = false;
+        irrigation.onoff = onoff;
+        await this.irrigationRepository.save(irrigation); // await 키워드 추가
+      }
+  
+      // 작동중인 경우 누적 시간 증가
+      if (onoff) {
+        accumulatedTime++;
+        irrigation.accumulated_time = accumulatedTime;
+        await this.irrigationRepository.save(irrigation); // await 키워드 추가
+      }
     }
+    }catch(error){
+      console.error(`startSchedule 실행중 예외 발생 : ${error}`);
   }
-  async stopSchedule(id: number) {
-    const irrigation = await this.irrigationRepository.findOneBy({id});
-    if (irrigation && irrigation.intervalId !== null) {
-    clearInterval(irrigation.intervalId);
-    irrigation.intervalId = null;
-    irrigation.onoff = false;
-    irrigation.accumulatedTime = 0;
-    await this.irrigationRepository.save(irrigation);
-    }
-  }
+}
 }

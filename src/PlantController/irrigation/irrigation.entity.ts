@@ -71,7 +71,7 @@ export class IrrigationEntity extends BaseEntity {
     }
 
     @Column({type:'int', nullable : true})
-    accumulatedTime:number;
+    accumulated_time:number;
     
     @ManyToOne(type=>User, user=>user.irrigations,{eager : false})
     user: User;
