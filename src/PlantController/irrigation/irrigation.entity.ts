@@ -28,13 +28,13 @@ export class IrrigationEntity extends BaseEntity {
     sat_day : Boolean
 
     @Column()
-    s_hour : number;
+    s_hour : string;
     
     @Column()
-    s_min : number;
+    s_min : string;
 
-    @Column()
-    on_time : number;
+    @Column({ default : false})
+    test : Boolean;
 
     @Column({ default : false})
     line_1 : Boolean;
@@ -47,9 +47,6 @@ export class IrrigationEntity extends BaseEntity {
 
     @Column({ default : false})
     onoff : Boolean;
-
-    @Column({ nullable: true, type: 'simple-json' })
-    intervalId: NodeJS.Timeout;
 
     @CreateDateColumn()
     createDate : Date;
