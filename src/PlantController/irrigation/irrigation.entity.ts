@@ -34,7 +34,10 @@ export class IrrigationEntity extends BaseEntity {
     s_min : string;
 
     @Column({ default : false})
-    test : Boolean;
+    schedule_btn : Boolean;
+
+    @Column({ default : false })
+    manually_btn : Boolean;
 
     @Column({ default : false})
     line_1 : Boolean;
@@ -44,6 +47,9 @@ export class IrrigationEntity extends BaseEntity {
 
     @Column({ default : false})
     line_3 : Boolean;
+
+    @Column({default : false})
+    onoff_manually : Boolean;
 
     @Column({ default : false})
     onoff : Boolean;
@@ -61,6 +67,9 @@ export class IrrigationEntity extends BaseEntity {
 
     @Column()
     set_time : number;
+
+    @Column()
+    manually_time : number
 
     async save(): Promise<this> {
         this.updatedAt = new Date();

@@ -38,9 +38,13 @@ export class IrrigationController {
         return this.irrigationService.deleteIrrigation(id);
     }
 
-    // @Patch(':id')
-    // update(@Param('id')id:number,@Body()irrigationEntity:IrrigationEntity){
-    //     return this.irrigationService.update(id,irrigationEntity);
-    // }
+    @Patch(':id')
+    update(@Param('id')id:number,@Body()irrigationEntity:IrrigationEntity){
+        return this.irrigationService.update(id,irrigationEntity);
+    }
 
+    @Patch(':id/manually')
+    update_manually(@Param('id')id:number,@Body()irrigationEntity:IrrigationEntity){
+        return this.irrigationService.update_manually(id,irrigationEntity);
+    }
 }
