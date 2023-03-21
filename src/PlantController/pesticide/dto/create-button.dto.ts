@@ -30,7 +30,13 @@ export class CreatePesticideDto {
     s_min : number;
 
     @IsNotEmpty()
-    on_time : number;
+    schedule_btn : Boolean;
+
+    @IsNotEmpty()
+    manually_btn : Boolean;
+
+    @IsNotEmpty()
+    onoff_manually : Boolean;
 
     @IsNotEmpty()
     line_1 : Boolean;
@@ -46,4 +52,7 @@ export class CreatePesticideDto {
 
     @IsNotEmpty()
     set_time : number;
+
+    @IsNotEmpty()
+    manually_time : number;
 }

@@ -33,12 +33,6 @@ export class CreateButtonDto {
     schedule_btn : Boolean;
 
     @IsNotEmpty()
-    manually_btn : Boolean;
-
-    @IsNotEmpty()
-    onoff_manually : Boolean;
-
-    @IsNotEmpty()
     line_1 : Boolean;
 
     @IsNotEmpty()
@@ -52,8 +46,5 @@ export class CreateButtonDto {
 
     @IsNotEmpty()
     set_time : number;
-
-    @IsNotEmpty()
-    manually_time : number;
 
 }

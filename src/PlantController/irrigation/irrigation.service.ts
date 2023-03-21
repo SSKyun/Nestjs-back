@@ -1,3 +1,5 @@
+import { Irrigation_m } from 'src/PlantController/irrigation/irrigation_m.entity';
+import { Create_mButtonDto } from './dto/create-mbutton.dto';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -11,7 +13,6 @@ import { connect, Stan } from 'node-nats-streaming';
 
 @Injectable()
 export class IrrigationService {
-  private readonly logger = new Logger(IrrigationService.name);
   private natsClient: Stan;
 
   constructor(
@@ -29,7 +30,7 @@ export class IrrigationService {
   
     try {
       this.natsClient = await connect(clusterId, clientId, { url: natsUrl });
-      console.log(`Connected to NATS at ${natsUrl}`);
+      console.log(`Connected to NATS at ${natsUrl} - irrigation`);
       this.startSchedule();
       this.natsClient.on('close', () => {
         console.log(`Disconnected from NATS at ${natsUrl}`);
@@ -57,36 +58,10 @@ export class IrrigationService {
     return this.irrigationRepository.createIrrigationButton(createButtonDto, user);
   }
 
+
   async deleteIrrigation(id: number): Promise<void> {
     const result = await this.irrigationRepository.delete(id);
     console.log('result', result);
-  }
-
-  async update_manually(id: number, irrigationEntity: IrrigationEntity): Promise<void> {
-    const update = await this.irrigationRepository.findOneBy({ id });
-    update.manually_time = irrigationEntity.manually_time;
-    update.manually_btn = irrigationEntity.manually_btn;
-  
-    await this.irrigationRepository.save(update);
-  
-    const interval = setInterval(async () => {
-      try {
-        console.log("interval 작동");
-        if (update.manually_time > 0 && update.manually_btn === true) {
-          await this.natsClient.publish('irrigation.button.update', JSON.stringify({id, accumulated_time: (update.accumulated_time ?? 0) + 1}));
-          update.accumulated_time = (update.accumulated_time ?? 0) + 1;
-          update.manually_time--;
-          await this.irrigationRepository.save(update);
-        } else {
-          update.manually_time = 0;
-          await this.irrigationRepository.save(update);
-          await this.natsClient.publish('irrigation.button.update', JSON.stringify({id, manually_btn: false}));
-          clearInterval(interval);
-        }
-      } catch (error) {
-        console.error(`update_manually 실행 중 에러: ${error}`);
-      }
-    }, 60000);
   }
 
   async update(id:number,irrigationentity:IrrigationEntity):Promise<void>{
@@ -177,8 +152,8 @@ export class IrrigationService {
         }
 
         if(onoff === false){
-          console.log(`${currentHour}:${currentMinute} 현재시간`)
-          console.log(`${irrigation.s_hour}:${startMinute}_${setTime} 저장시간`)
+          // console.log(`${currentHour}:${currentMinute} 현재시간`)
+          // console.log(`${irrigation.s_hour}:${startMinute}_${setTime} 저장시간`)
         }
       }
 

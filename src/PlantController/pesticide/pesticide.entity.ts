@@ -33,8 +33,11 @@ export class PesticideEntity extends BaseEntity{
     @Column()
     s_min : number;
 
-    @Column()
-    on_time : number;
+    @Column({ default : false})
+    schedule_btn : Boolean;
+
+    @Column({ default : false })
+    manually_btn : Boolean;
 
     @Column({ default : false})
     line_1 : Boolean;
@@ -44,6 +47,9 @@ export class PesticideEntity extends BaseEntity{
 
     @Column({ default : false})
     line_3 : Boolean;
+
+    @Column({default : false})
+    onoff_manually : Boolean;
 
     @Column({ default : false})
     onoff : Boolean;
@@ -62,10 +68,16 @@ export class PesticideEntity extends BaseEntity{
     @Column()
     set_time : number;
 
+    @Column()
+    manually_time : number
+
     async save(): Promise<this> {
         this.updatedAt = new Date();
         return super.save();
     }
+
+    @Column({type:'int', nullable : true})
+    accumulated_time:number;
 
     @ManyToOne(type=>User, user=>user.pesticides,{eager : false})
     user: User;
