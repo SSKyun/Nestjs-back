@@ -1,7 +1,7 @@
-import { Irrigation_m } from 'src/PlantController/irrigation/irrigation_m.entity';
+import { Irrigation_m } from 'src/PlantController/irrigation/irrigation_manually/irrigation_m.entity';
 import { Repository, DataSource } from 'typeorm';
 import { Injectable } from '@nestjs/common';
-import { Create_mButtonDto } from './dto/create-mbutton.dto';
+import { Create_mButtonDto } from '../dto/create-mbutton.dto';
 import { User } from 'src/auth/user.entity';
 
 @Injectable()

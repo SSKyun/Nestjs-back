@@ -1,10 +1,10 @@
-import { Create_mButtonDto } from './dto/create-mbutton.dto';
+import { Create_mButtonDto } from '../dto/create-mbutton.dto';
 import { IrrigationEntity } from './irrigation.entity';
 import { Repository, DataSource } from 'typeorm';
 import { Injectable } from "@nestjs/common";
-import { CreateButtonDto } from './dto/create-button.dto';
+import { CreateButtonDto } from '../dto/create-button.dto';
 import { User } from 'src/auth/user.entity';
-import { Irrigation_m } from './irrigation_m.entity';
+import { Irrigation_m } from '../irrigation_manually/irrigation_m.entity';
 
 @Injectable()
 export class IrrigationRepository extends Repository<IrrigationEntity>{

@@ -1,10 +1,10 @@
-import { Irrigation_m } from 'src/PlantController/irrigation/irrigation_m.entity';
-import { Create_mButtonDto } from './dto/create-mbutton.dto';
+import { Irrigation_m } from 'src/PlantController/irrigation/irrigation_manually/irrigation_m.entity';
+import { Create_mButtonDto } from '../dto/create-mbutton.dto';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IrrigationEntity } from './irrigation.entity';
-import { CreateButtonDto } from './dto/create-button.dto';
+import { CreateButtonDto } from '../dto/create-button.dto';
 import { Request } from 'express';
 import { firstValueFrom, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';

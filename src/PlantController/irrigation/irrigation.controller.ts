@@ -1,16 +1,16 @@
-import { Irrigation_m } from 'src/PlantController/irrigation/irrigation_m.entity';
+import { Irrigation_m } from 'src/PlantController/irrigation/irrigation_manually/irrigation_m.entity';
 import { Create_mButtonDto } from './dto/create-mbutton.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { IrrigationEntity } from './irrigation.entity';
+import { IrrigationEntity } from './irrigation_basic/irrigation.entity';
 import { CreateButtonDto } from './dto/create-button.dto';
-import { IrrigationService } from './irrigation.service';
+import { IrrigationService } from './irrigation_basic/irrigation.service';
 import { Body, Controller, Get, Post, Req, UseGuards, UsePipes, ValidationPipe, ParseIntPipe } from '@nestjs/common';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
 import { AccessTokenGuard } from 'src/auth/guard/accessToken.guard';
 import { Request } from 'express';
 import { Delete, Param, Patch, Put } from '@nestjs/common/decorators';
-import { Irrigation_mService } from './irrigation_m.service';
+import { Irrigation_mService } from './irrigation_manually/irrigation_m.service';
 
 @Controller('irrigation')
 @UseGuards(AccessTokenGuard)
@@ -37,7 +37,7 @@ export class IrrigationController {
         return this.irrigation_mService.getuserAll_m(req.user);
     }
 
-    @Post('test')
+    @Post('manually')
     @UsePipes(ValidationPipe)
     createIrrigation_m(@Body() create_mButtondto:Create_mButtonDto,
     @Req() req:Request):Promise<Irrigation_m>{

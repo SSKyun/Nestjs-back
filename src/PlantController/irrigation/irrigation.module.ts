@@ -1,10 +1,10 @@
-import { Irrigation_mService } from './irrigation_m.service';
-import { Irrigation_mRepository } from './irrigation_m.repository';
-import { IrrigationRepository } from './irrigation.repository';
+import { Irrigation_mService } from './irrigation_manually/irrigation_m.service';
+import { Irrigation_mRepository } from './irrigation_manually/irrigation_m.repository';
+import { IrrigationRepository } from './irrigation_basic/irrigation.repository';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { IrrigationController } from './irrigation.controller';
-import { IrrigationService } from './irrigation.service';
+import { IrrigationService } from './irrigation_basic/irrigation.service';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({

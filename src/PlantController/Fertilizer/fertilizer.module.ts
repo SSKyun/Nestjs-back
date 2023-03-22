@@ -2,7 +2,7 @@ import { FertilizerRepository } from './fertilizer.repository';
 import { FertilizerService } from './fertilizer.service';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { IrrigationRepository } from '../irrigation/irrigation.repository';
+import { IrrigationRepository } from '../irrigation/irrigation_basic/irrigation.repository';
 import { FertilizerController } from './fertilizer.controller';
 
 

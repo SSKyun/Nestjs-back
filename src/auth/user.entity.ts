@@ -1,12 +1,12 @@
 import { PesticideEntity } from '../PlantController/pesticide/pesticide.entity';
-import { IrrigationEntity } from '../PlantController/irrigation/irrigation.entity';
+import { IrrigationEntity } from '../PlantController/irrigation/irrigation_basic/irrigation.entity';
 import { Board } from 'src/boards/board.entity';
 import { BeforeUpdate, CreateDateColumn, Entity, Index, OneToMany, Unique, UpdateDateColumn } from 'typeorm';
 import { BaseEntity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { FertilizerEntity } from 'src/PlantController/Fertilizer/fertilizer.entity';
 import { minLength } from 'class-validator';
 import { Comment } from 'src/comments/comment.entity';
-import { Irrigation_m } from 'src/PlantController/irrigation/irrigation_m.entity';
+import { Irrigation_m } from 'src/PlantController/irrigation/irrigation_manually/irrigation_m.entity';
 
 @Entity()
 @Unique(["username"])
