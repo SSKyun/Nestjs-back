@@ -33,8 +33,8 @@ export class FertilizerEntity extends BaseEntity {
     @Column()
     s_min : number;
 
-    @Column()
-    on_time : number;
+    @Column({ default : false})
+    schedule_btn : Boolean;
 
     @Column({ default : false})
     line_1 : Boolean;
@@ -48,6 +48,9 @@ export class FertilizerEntity extends BaseEntity {
     @Column({ default : false})
     onoff : Boolean;
 
+    @CreateDateColumn()
+    createDate : Date;
+
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
 
@@ -60,6 +63,15 @@ export class FertilizerEntity extends BaseEntity {
         this.updatedAt = new Date();
         return super.save();
     }
+
+    @Column({default : 0})
+    Count : number;
+
+    @Column()
+    set_time : number;
+
+    @Column({type:'int', nullable : true})
+    accumulated_time:number;
 
     @ManyToOne(type=>User, user=>user.fertilizers,{eager : false})
     user: User;

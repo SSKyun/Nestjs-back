@@ -30,7 +30,7 @@ export class CreateFertilizerDto {
     s_min : number;
 
     @IsNotEmpty()
-    on_time : number;
+    schedule_btn : Boolean;
 
     @IsNotEmpty()
     line_1 : Boolean;
@@ -44,4 +44,6 @@ export class CreateFertilizerDto {
     @IsNotEmpty()
     onoff : Boolean;
 
+    @IsNotEmpty()
+    set_time : number;
 }

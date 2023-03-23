@@ -59,13 +59,16 @@ export class IrrigationEntity extends BaseEntity {
         this.updatedAt = new Date();
     }
 
-    @Column()
-    set_time : number;
-
     async save(): Promise<this> {
         this.updatedAt = new Date();
         return super.save();
     }
+
+    @Column({default : 0})
+    Count : number;
+
+    @Column()
+    set_time : number;
 
     @Column({type:'int', nullable : true})
     accumulated_time:number;

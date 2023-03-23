@@ -1,9 +1,10 @@
+import { Fertilizer_m } from './../PlantController/Fertilizer/fertilizer_manually/fertilizer_m.entity';
 import { PesticideEntity } from '../PlantController/pesticide/pesticide.entity';
 import { IrrigationEntity } from '../PlantController/irrigation/irrigation_basic/irrigation.entity';
 import { Board } from 'src/boards/board.entity';
 import { BeforeUpdate, CreateDateColumn, Entity, Index, OneToMany, Unique, UpdateDateColumn } from 'typeorm';
 import { BaseEntity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { FertilizerEntity } from 'src/PlantController/Fertilizer/fertilizer.entity';
+import { FertilizerEntity } from 'src/PlantController/Fertilizer/fertilizer_basic/fertilizer.entity';
 import { minLength } from 'class-validator';
 import { Comment } from 'src/comments/comment.entity';
 import { Irrigation_m } from 'src/PlantController/irrigation/irrigation_manually/irrigation_m.entity';
@@ -56,6 +57,9 @@ export class User extends BaseEntity {
 
     @OneToMany(type=> PesticideEntity,pesticide => pesticide.user, {eager : true})
     pesticides : PesticideEntity[]
+
+    @OneToMany(type=>Fertilizer_m,fertilizer => fertilizer.user,{eager:true})
+    fertilier_m : Fertilizer_m[]
 
     @OneToMany(type=> FertilizerEntity,fertilizer => fertilizer.user, {eager : true})
     fertilizers : FertilizerEntity[]

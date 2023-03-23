@@ -111,6 +111,7 @@ export class IrrigationService {
           irrigation.fri_day,
           irrigation.sat_day,
         ];
+        let Count = irrigation.Count;
         const setTime = irrigation.set_time;
         const line1 = irrigation.line_1;
         const line2 = irrigation.line_2;
@@ -118,7 +119,8 @@ export class IrrigationService {
         const startHour: number = Number(irrigation.s_hour);
         const startMinute: number = Number(irrigation.s_min);
         let onoff = irrigation.onoff || false;
-        let accumulatedTime = irrigation.accumulated_time || 0;
+        let accumulatedTime = irrigation.accumulated_time;
+        
 
         if (
           daysOfWeek[currentDayOfWeek] &&
@@ -126,6 +128,7 @@ export class IrrigationService {
           currentMinute === startMinute &&
           !onoff
         ) {
+          
           console.log(`Starting irrigation ${irrigation.id}`);
           // TODO: 라즈베리파이 GPIO를 이용하여 라인 출력
           onoff = true;
@@ -135,18 +138,23 @@ export class IrrigationService {
           console.log(`onoff is now ${onoff}`);
         }
         
-        if (onoff && accumulatedTime >= setTime) {
+        if (onoff && Count === setTime) {
           console.log(`Stopping irrigation ${irrigation.id}`);
           // TODO: 라즈베리파이 GPIO를 이용하여 라인 정지
           onoff = false;
           irrigation.onoff = onoff;
+          Count = 0;
+          irrigation.Count = Count
           await this.irrigationRepository.save(irrigation);
           console.log(`onoff is now ${onoff}`);
-          accumulatedTime = 0;
+          
         }
         
         if (onoff) {
           accumulatedTime++;
+          Count++;
+          console.log(Count);
+          irrigation.Count = Count;
           irrigation.accumulated_time = accumulatedTime;
           await this.irrigationRepository.save(irrigation);
         }
