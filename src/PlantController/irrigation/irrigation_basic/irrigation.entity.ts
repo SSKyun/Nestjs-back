@@ -27,6 +27,69 @@ export class IrrigationEntity extends BaseEntity {
     @Column()
     sat_day : Boolean
 
+    @Column({default : 0})
+    sun_line1_AT: number;
+
+    @Column({default : 0})
+    mon_line1_AT: number;
+
+    @Column({default : 0})
+    tue_line1_AT: number;
+
+    @Column({default : 0})
+    wed_line1_AT: number;
+
+    @Column({default : 0})
+    thu_line1_AT: number;
+
+    @Column({default : 0})
+    fri_line1_AT: number;
+
+    @Column({default : 0})
+    sat_line1_AT: number;
+
+    @Column({default : 0})
+    sun_line2_AT: number;
+
+    @Column({default : 0})
+    mon_line2_AT: number;
+
+    @Column({default : 0})
+    tue_line2_AT: number;
+
+    @Column({default : 0})
+    wed_line2_AT: number;
+
+    @Column({default : 0})
+    thu_line2_AT: number;
+
+    @Column({default : 0})
+    fri_line2_AT: number;
+
+    @Column({default : 0})
+    sat_line2_AT: number;
+
+    @Column({default : 0})
+    sun_line3_AT: number;
+
+    @Column({default : 0})
+    mon_line3_AT: number;
+
+    @Column({default : 0})
+    tue_line3_AT: number;
+
+    @Column({default : 0})
+    wed_line3_AT: number;
+
+    @Column({default : 0})
+    thu_line3_AT: number;
+
+    @Column({default : 0})
+    fri_line3_AT: number;
+
+    @Column({default : 0})
+    sat_line3_AT: number;
+
     @Column()
     s_hour : string;
     

@@ -91,14 +91,21 @@ export class IrrigationService {
   async startSchedule() {
   try {
     while (true) {
+      const startOfWeek = 0; // 일요일을 시작 요일로 지정
       const now = new Date();
       const utcHour = now.getUTCHours();
       const kstHour = utcHour + 9;
       const currentDayOfWeek = now.getUTCDay();
       const currentHour = kstHour < 24 ? kstHour : kstHour - 24;
       const currentMinute = now.getUTCMinutes();
+      const daysSinceStartOfWeek = currentDayOfWeek >= startOfWeek ? currentDayOfWeek - startOfWeek : 7 - startOfWeek + currentDayOfWeek;
+      const startOfWeekDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - daysSinceStartOfWeek);
 
       const irrigations = await this.irrigationRepository.find();
+      const line1Key = `${['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][currentDayOfWeek]}_line1_AT`;
+      const line2Key = `${['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][currentDayOfWeek]}_line2_AT`;
+      const line3Key = `${['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][currentDayOfWeek]}_line3_AT`;
+      const irrigationUpdates = {};
       const irrigationsToSchedule = irrigations.filter((irrigation) => irrigation.schedule_btn);
       // schedule_btn이 true면 사용자가 스케쥴을 사용하겠다고 표시해준거임.
       for (const irrigation of irrigationsToSchedule) {
@@ -151,12 +158,9 @@ export class IrrigationService {
         }
         
         if (onoff) {
-          accumulatedTime++;
-          Count++;
-          console.log(Count);
-          irrigation.Count = Count;
-          irrigation.accumulated_time = accumulatedTime;
-          await this.irrigationRepository.save(irrigation);
+          irrigationUpdates[line1Key] = (irrigation[line1Key] || 0) + 1;
+          irrigationUpdates[line2Key] = (irrigation[line2Key] || 0) + 1;
+          irrigationUpdates[line3Key] = (irrigation[line3Key] || 0) + 1;
         }
 
         if(onoff === false){
