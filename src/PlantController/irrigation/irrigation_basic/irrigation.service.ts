@@ -158,9 +158,17 @@ export class IrrigationService {
         }
         
         if (onoff) {
+          console.log(irrigationUpdates[line1Key])
+          console.log(irrigationUpdates[line2Key])
+          console.log(irrigationUpdates[line3Key])
           irrigationUpdates[line1Key] = (irrigation[line1Key] || 0) + 1;
           irrigationUpdates[line2Key] = (irrigation[line2Key] || 0) + 1;
           irrigationUpdates[line3Key] = (irrigation[line3Key] || 0) + 1;
+          console.log(irrigationUpdates[line1Key])
+          console.log(irrigationUpdates[line2Key])
+          console.log(irrigationUpdates[line3Key])
+
+          //await this.irrigationRepository.save()
         }
 
         if(onoff === false){
