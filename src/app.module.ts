@@ -14,6 +14,7 @@ import { IrrigationModule } from './PlantController/irrigation/irrigation.module
 import { PesticideModule } from './PlantController/pesticide/pesticide.module';
 import { CommentsModule } from './comments/comments.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { MqttModule } from 'nest-mqtt';
 
 
 @Module({
@@ -24,6 +25,19 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
     PesticideModule,
     FertilizerModule,
     CommentsModule,
+    MqttModule.forRoot({
+      servers: [
+        {
+          host: '210.223.152.36',
+          port: 22,
+        },
+      ],
+      clientId: 'nestjs-microservice-SungKyun',
+      username: 'root',
+      password: 'amol@dkagh',
+      protocol: 'mqtt',
+      rejectUnauthorized: false,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
