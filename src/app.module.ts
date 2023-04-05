@@ -25,19 +25,19 @@ import { MqttModule } from 'nest-mqtt';
     PesticideModule,
     FertilizerModule,
     CommentsModule,
-    MqttModule.forRoot({
-      servers: [
-        {
-          host: '210.223.152.36',
-          port: 22,
-        },
-      ],
-      clientId: 'nestjs-microservice-SungKyun',
-      username: 'root',
-      password: 'amol@dkagh',
-      protocol: 'mqtt',
-      rejectUnauthorized: false,
-    }),
+    // MqttModule.forRoot({
+    //   servers: [
+    //     {
+    //       host: '210.223.152.36',
+    //       port: 22,
+    //     },
+    //   ],
+    //   clientId: 'nestjs-microservice-SungKyun',
+    //   username: 'root',
+    //   password: 'amol@dkagh',
+    //   protocol: 'mqtt',
+    //   rejectUnauthorized: false,
+    // }),
   ],
   controllers: [AppController],
   providers: [AppService],
