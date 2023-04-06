@@ -7,115 +7,55 @@ export class IrrigationEntity extends BaseEntity {
     id:number;
 
     @Column()
-    sun_day : Boolean
+    sun_day : number
 
     @Column()
-    mon_day : Boolean
+    mon_day : number
 
     @Column()
-    tue_day : Boolean
+    tue_day : number
 
     @Column()
-    wed_day : Boolean
+    wed_day : number
 
     @Column()
-    thu_day : Boolean
+    thu_day : number
 
     @Column()
-    fri_day : Boolean
+    fri_day : number
 
     @Column()
-    sat_day : Boolean
+    sat_day : number
 
-    @Column({default : 0})
-    sun_line1_AT: number;
-
-    @Column({default : 0})
-    mon_line1_AT: number;
-
-    @Column({default : 0})
-    tue_line1_AT: number;
-
-    @Column({default : 0})
-    wed_line1_AT: number;
-
-    @Column({default : 0})
-    thu_line1_AT: number;
-
-    @Column({default : 0})
-    fri_line1_AT: number;
-
-    @Column({default : 0})
-    sat_line1_AT: number;
-
-    @Column({default : 0})
-    sun_line2_AT: number;
-
-    @Column({default : 0})
-    mon_line2_AT: number;
-
-    @Column({default : 0})
-    tue_line2_AT: number;
-
-    @Column({default : 0})
-    wed_line2_AT: number;
-
-    @Column({default : 0})
-    thu_line2_AT: number;
-
-    @Column({default : 0})
-    fri_line2_AT: number;
-
-    @Column({default : 0})
-    sat_line2_AT: number;
-
-    @Column({default : 0})
-    sun_line3_AT: number;
-
-    @Column({default : 0})
-    mon_line3_AT: number;
-
-    @Column({default : 0})
-    tue_line3_AT: number;
-
-    @Column({default : 0})
-    wed_line3_AT: number;
-
-    @Column({default : 0})
-    thu_line3_AT: number;
-
-    @Column({default : 0})
-    fri_line3_AT: number;
-
-    @Column({default : 0})
-    sat_line3_AT: number;
-
-    @Column()
-    s_hour : string;
+    @Column() 
+    s_hour : string; // 시작 시간
     
     @Column()
-    s_min : string;
+    s_min : string; //시작 분
 
     @Column({ default : false})
     schedule_btn : Boolean;
 
     @Column({ default : false})
-    line_1 : Boolean;
+    line_1 : Boolean; // 관수
 
     @Column({ default : false})
-    line_2 : Boolean;
+    line_2 : Boolean; // 액비
 
     @Column({ default : false})
     line_3 : Boolean;
 
     @Column({ default : false})
-    onoff : Boolean;
+    onoff : Boolean; //현재 상태
+
+    @Column()
+    machine_id : string;
 
     @CreateDateColumn()
     createDate : Date;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    updatedAt: Date;
+    updatedAt: Date; //수정 시간
 
     @BeforeUpdate()
     updateTimestamp() {
@@ -128,13 +68,13 @@ export class IrrigationEntity extends BaseEntity {
     }
 
     @Column({default : 0})
-    Count : number;
+    Count : number; // 카운트
 
     @Column()
-    set_time : number;
+    set_time : number; // 동작 몇분 
 
     @Column({type:'int', nullable : true})
-    accumulated_time:number;
+    accumulated_time:number; // 누적 시간
     
     @ManyToOne(type=>User, user=>user.irrigations,{eager : false})
     user: User;

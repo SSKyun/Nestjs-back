@@ -3,25 +3,25 @@ import { IsNotEmpty } from 'class-validator';
 export class CreateButtonDto {
 
     @IsNotEmpty()
-    sun_day : Boolean
+    sun_day : number;
 
     @IsNotEmpty()
-    mon_day : Boolean
+    mon_day : number;
 
     @IsNotEmpty()
-    tue_day : Boolean
+    tue_day : number;
 
     @IsNotEmpty()
-    wed_day : Boolean
+    wed_day : number;
 
     @IsNotEmpty()
-    thu_day : Boolean
+    thu_day : number;
 
     @IsNotEmpty()
-    fri_day : Boolean
+    fri_day : number;
 
     @IsNotEmpty()
-    sat_day : Boolean
+    sat_day : number;
 
     @IsNotEmpty()
     s_hour : string;
@@ -46,5 +46,8 @@ export class CreateButtonDto {
 
     @IsNotEmpty()
     set_time : number;
+
+    @IsNotEmpty()
+    machine_id : string;
 
 }

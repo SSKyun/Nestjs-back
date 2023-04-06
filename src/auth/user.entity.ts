@@ -8,6 +8,7 @@ import { FertilizerEntity } from 'src/PlantController/Fertilizer/fertilizer_basi
 import { minLength } from 'class-validator';
 import { Comment } from 'src/comments/comment.entity';
 import { Irrigation_m } from 'src/PlantController/irrigation/irrigation_manually/irrigation_m.entity';
+import { DeviceEntity } from 'src/PlantController/Device/device.entity';
 
 @Entity()
 @Unique(["username"])
@@ -29,6 +30,9 @@ export class User extends BaseEntity {
 
     @Column()
     phone_number : string;
+
+    @Column()
+    umachine_num : number;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
@@ -63,6 +67,9 @@ export class User extends BaseEntity {
 
     @OneToMany(type=> FertilizerEntity,fertilizer => fertilizer.user, {eager : true})
     fertilizers : FertilizerEntity[]
+
+    @OneToMany(type=>DeviceEntity,device=>device.user,{eager:true})
+    device : DeviceEntity[]
     
     @Column({nullable : true})
     refreshToken: string;

@@ -102,10 +102,6 @@ export class IrrigationService {
       const startOfWeekDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - daysSinceStartOfWeek);
 
       const irrigations = await this.irrigationRepository.find();
-      const line1Key = `${['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][currentDayOfWeek]}_line1_AT`;
-      const line2Key = `${['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][currentDayOfWeek]}_line2_AT`;
-      const line3Key = `${['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][currentDayOfWeek]}_line3_AT`;
-      const irrigationUpdates = {};
       const irrigationsToSchedule = irrigations.filter((irrigation) => irrigation.schedule_btn);
       // schedule_btn이 true면 사용자가 스케쥴을 사용하겠다고 표시해준거임.
       for (const irrigation of irrigationsToSchedule) {
@@ -158,16 +154,7 @@ export class IrrigationService {
         }
         
         if (onoff) {
-          console.log(irrigationUpdates[line1Key])
-          console.log(irrigationUpdates[line2Key])
-          console.log(irrigationUpdates[line3Key])
-          irrigationUpdates[line1Key] = (irrigation[line1Key] || 0) + 1;
-          irrigationUpdates[line2Key] = (irrigation[line2Key] || 0) + 1;
-          irrigationUpdates[line3Key] = (irrigation[line3Key] || 0) + 1;
-          console.log(irrigationUpdates[line1Key])
-          console.log(irrigationUpdates[line2Key])
-          console.log(irrigationUpdates[line3Key])
-
+          
           //await this.irrigationRepository.save()
         }
 

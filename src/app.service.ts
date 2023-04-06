@@ -2,7 +2,8 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as mqtt from 'mqtt';
 
 @Injectable()
-export class AppService implements OnModuleInit {
+export class AppService //{}
+implements OnModuleInit {
     private client: mqtt.Client;
   
     constructor() {}
@@ -10,9 +11,9 @@ export class AppService implements OnModuleInit {
     onModuleInit() {
       const options: mqtt.IClientOptions = {
         host: '210.223.152.36',
-        port: 22, // SSH port
-        username: 'root',
-        password: 'amol@dkagh',
+        port: 1883,
+        username: 'evastick',
+        password: 'evastick!@3',
       };
   
       this.client = mqtt.connect(options);
@@ -22,7 +23,7 @@ export class AppService implements OnModuleInit {
       });
   
       this.client.on('error', (err) => {
-        console.error('Connection error:', err);
+        console.error('MQTT Connection error:', err);
       });
     }
 

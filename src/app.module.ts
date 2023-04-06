@@ -15,6 +15,7 @@ import { PesticideModule } from './PlantController/pesticide/pesticide.module';
 import { CommentsModule } from './comments/comments.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { MqttModule } from 'nest-mqtt';
+import { DeviceModule } from './PlantController/Device/device.module';
 
 
 @Module({
@@ -25,6 +26,7 @@ import { MqttModule } from 'nest-mqtt';
     PesticideModule,
     FertilizerModule,
     CommentsModule,
+    DeviceModule,
     // MqttModule.forRoot({
     //   servers: [
     //     {
