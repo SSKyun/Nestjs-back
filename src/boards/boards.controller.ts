@@ -1,3 +1,4 @@
+import { connect } from 'node-nats-streaming';
 import { AccessTokenGuard } from './../auth/guard/accessToken.guard';
 import { User } from 'src/auth/user.entity';
 import { AuthGuard } from '@nestjs/passport';
@@ -9,12 +10,21 @@ import {BoardStatus} from './board-status.enum';
 import { Board } from './board.entity';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { Request } from 'express';
+import { MqttService } from 'nest-mqtt';
+import { Observable } from 'rxjs';
+
+interface IMqttMessage {
+    topic:string;
+    payload : Buffer;
+}
 
 @Controller('boards')
 @UseGuards(AccessTokenGuard)
 export class BoardsController {
-    constructor(private boardsService: BoardsService) { }
+    constructor(private boardsService: BoardsService,
+                private mqttService : MqttService) { }
 
+    
     @Get()
     getAllBoard(
     ): Promise<Board[]> {

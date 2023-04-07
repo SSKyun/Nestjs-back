@@ -8,12 +8,9 @@ import { typeORMConfig } from './configs/typeorm.config';
 import { AuthModule } from './auth/auth.module';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
-import { ClientsModule } from '@nestjs/microservices';
-import { Transport } from '@nestjs/microservices/enums';
 import { IrrigationModule } from './PlantController/irrigation/irrigation.module';
 import { PesticideModule } from './PlantController/pesticide/pesticide.module';
 import { CommentsModule } from './comments/comments.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { MqttModule } from 'nest-mqtt';
 import { DeviceModule } from './PlantController/Device/device.module';
 
@@ -27,21 +24,22 @@ import { DeviceModule } from './PlantController/Device/device.module';
     FertilizerModule,
     CommentsModule,
     DeviceModule,
-    // MqttModule.forRoot({
-    //   servers: [
-    //     {
-    //       host: '210.223.152.36',
-    //       port: 22,
-    //     },
-    //   ],
-    //   clientId: 'nestjs-microservice-SungKyun',
-    //   username: 'root',
-    //   password: 'amol@dkagh',
-    //   protocol: 'mqtt',
-    //   rejectUnauthorized: false,
-    // }),
+    MqttModule.forRoot({
+      servers: [
+        {
+          host: '210.223.152.36',
+          port: 1883,
+        },
+      ],
+      clientId: 'nestjs-microservice-SungKyun',
+      username: 'evastick',
+      password: 'evastick!@3',
+      protocol: 'mqtt',
+      rejectUnauthorized: false,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
+  exports : [MqttModule]
 })
 export class AppModule {}

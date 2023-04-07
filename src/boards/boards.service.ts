@@ -1,18 +1,32 @@
+import { OnModuleInit } from '@nestjs/common/interfaces';
+import { AppService } from './../app.service';
 import { User } from 'src/auth/user.entity';
 import { BoardRepository } from './boards.repository';
 import { CreateBoardDto } from './dto/create-board.dto';
-import { Get, Injectable, NotFoundException, Param } from '@nestjs/common';
-import { v1 as uuid } from 'uuid'; // npm i uuid --save
-import {BoardStatus} from './board-status.enum';
+import { Get, Inject, Injectable, NotFoundException, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from './board.entity';
+import { MqttClient } from 'mqtt';
 
 @Injectable()
 export class BoardsService {
     constructor(
         @InjectRepository(BoardRepository)
         private boardRepository : BoardRepository,
+        private readonly mqttClient : MqttClient,
     ){}//boardservice안에서 repository 사용가능하게함.
+
+    async sendMessage(topic : string,message : string){
+        await this.mqttClient.emit(topic,message)
+    }
+
+    async subscribeToTopic(topic : string){
+        await this.mqttClient.subscribe(topic);
+    }
+
+    async handleReceivedMessage(topic:string,message:Buffer){
+        console.log(`Received message on topic ${topic}: ${message.toString}`);
+    }
 
     async findOne(id:number): Promise<Board>{
         return this.boardRepository.findOneBy({id});
@@ -42,7 +56,6 @@ export class BoardsService {
     //     if(result.affected == 0){
     //         throw new NotFoundException(`Can't find Board with id ${id} && ${user}`);
     //     }
-        
     //     console.log('result',result);
     // } 해당 유저만 삭제가능하게.
 
