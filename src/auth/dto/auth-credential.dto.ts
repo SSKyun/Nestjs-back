@@ -20,4 +20,6 @@ export class AuthCredentialsDto{
     nickname : string;
 
     phone_number : string;
+
+    address : string;
 }

@@ -11,9 +11,10 @@ export class DeviceRepository extends Repository<DeviceEntity>{
     }
     async createDevice(createDeviceDto:CreateDeviceDto,user:{[key:string]:any}):Promise<DeviceEntity>{
         const user1 = await User.findOneBy({id:user['sub']});
-        const { epump,etime,wpump,wtime1,wval1,wval2,wtime2,cval1,
+        const { device,epump,etime,wpump,wtime1,wval1,wval2,wtime2,cval1,
         cval2,ctime} = createDeviceDto;
-        const device = this.create({
+        const DeviceData = this.create({
+            device,
             user : user1,
             epump,
             etime,
@@ -26,7 +27,7 @@ export class DeviceRepository extends Repository<DeviceEntity>{
             cval2,
             ctime
         });
-        await this.save(device)
-        return device;
+        await this.save(DeviceData)
+        return DeviceData;
     }
 }

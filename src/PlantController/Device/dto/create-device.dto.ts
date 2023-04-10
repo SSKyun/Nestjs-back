@@ -2,6 +2,8 @@ import { IsNotEmpty } from "class-validator";
 
 export class CreateDeviceDto{
 
+    device: string;
+
     epump : number;
 
     etime : number;

@@ -9,6 +9,7 @@ import { minLength } from 'class-validator';
 import { Comment } from 'src/comments/comment.entity';
 import { Irrigation_m } from 'src/PlantController/irrigation/irrigation_manually/irrigation_m.entity';
 import { DeviceEntity } from 'src/PlantController/Device/device.entity';
+import { Envir_stat } from 'src/statistics/envir_stat.entity';
 
 @Entity()
 @Unique(["username"])
@@ -25,14 +26,20 @@ export class User extends BaseEntity {
     @Column()
     nickname: string;
 
-    @CreateDateColumn()
-    createDate : Date;
+    @Column({ nullable : true})
+    address : string;
+
+    @CreateDateColumn() // 통신 서비스 시작일
+    ustart_date : Date;
 
     @Column()
     phone_number : string;
 
-    @Column()
+    @Column() //총 보유 제어기 수량
     umachine_num : number;
+
+    @Column() //통신 서비스 종료일
+    uend_date : string;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
@@ -70,6 +77,9 @@ export class User extends BaseEntity {
 
     @OneToMany(type=>DeviceEntity,device=>device.user,{eager:true})
     device : DeviceEntity[]
+
+    @OneToMany(type=>Envir_stat,envir_stat => envir_stat.user, {eager:true})
+    envir_stats : Envir_stat[]
     
     @Column({nullable : true})
     refreshToken: string;

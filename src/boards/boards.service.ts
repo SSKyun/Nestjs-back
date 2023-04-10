@@ -3,35 +3,26 @@ import { AppService } from './../app.service';
 import { User } from 'src/auth/user.entity';
 import { BoardRepository } from './boards.repository';
 import { CreateBoardDto } from './dto/create-board.dto';
-import { Get, Inject, Injectable, NotFoundException, Param } from '@nestjs/common';
+import { Body, Get, Inject, Injectable, NotFoundException, Param, Post } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from './board.entity';
 import { MqttClient } from 'mqtt';
+import { MqttService, Payload } from 'nest-mqtt';
+import { MessagePattern } from '@nestjs/microservices';
 
 @Injectable()
 export class BoardsService {
     constructor(
         @InjectRepository(BoardRepository)
         private boardRepository : BoardRepository,
-        private readonly mqttClient : MqttClient,
+        private readonly mqttService: MqttService,
     ){}//boardservice안에서 repository 사용가능하게함.
 
-    async sendMessage(topic : string,message : string){
-        await this.mqttClient.emit(topic,message)
-    }
-
-    async subscribeToTopic(topic : string){
-        await this.mqttClient.subscribe(topic);
-    }
-
-    async handleReceivedMessage(topic:string,message:Buffer){
-        console.log(`Received message on topic ${topic}: ${message.toString}`);
-    }
+    
 
     async findOne(id:number): Promise<Board>{
         return this.boardRepository.findOneBy({id});
     }
-
 
     async getAllBoards(
         //user:User

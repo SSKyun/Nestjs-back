@@ -4,16 +4,18 @@ import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "t
 @Entity()
 export class DeviceEntity extends BaseEntity{
     @PrimaryGeneratedColumn()
-    @ManyToOne(type=>User,user=>user.device,{eager : false})
-    user : User;
+    id : number;
 
     @Column()
+    device : string;
+
+    @Column({nullable : true})
     epump : number;
 
-    @Column()
+    @Column({nullable : true})
     etime : number;
 
-    @Column()
+    @Column({nullable : true})
     wpump : number;
 
     @Column()
@@ -28,12 +30,15 @@ export class DeviceEntity extends BaseEntity{
     @Column()
     wtime2 : number;
 
-    @Column()
+    @Column({nullable : true})
     cval1 : number;
 
-    @Column()
+    @Column({nullable : true})
     cval2 : number;
 
-    @Column()
+    @Column({nullable : true})
     ctime : number;
+
+    @ManyToOne(type=>User,user=>user.device,{eager : false})
+    user : User;
 }
