@@ -1,4 +1,3 @@
-import { FertilizerModule } from './PlantController/Fertilizer/fertilizer.module';
 // import { SocketModule } from './socket(test)/socket.module';
 import { GatewayModule } from './gateway/gateway.module';
 import { Module } from '@nestjs/common';
@@ -9,7 +8,6 @@ import { AuthModule } from './auth/auth.module';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { IrrigationModule } from './PlantController/irrigation/irrigation.module';
-import { PesticideModule } from './PlantController/pesticide/pesticide.module';
 import { CommentsModule } from './comments/comments.module';
 import { MqttModule } from 'nest-mqtt';
 import { DeviceModule } from './PlantController/Device/device.module';
@@ -20,8 +18,6 @@ import { DeviceModule } from './PlantController/Device/device.module';
     TypeOrmModule.forRoot(typeORMConfig), 
     AuthModule, 
     IrrigationModule,
-    PesticideModule,
-    FertilizerModule,
     CommentsModule,
     DeviceModule,
     MqttModule.forRoot({

@@ -2,9 +2,9 @@ import { User } from "src/auth/user.entity";
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Envir_stat extends BaseEntity{
+export class Envir_Entity extends BaseEntity{
     @PrimaryGeneratedColumn()
-    es_id : number;
+    id : number;
     
     @ManyToOne(type=>User,user=>user.envir_stats,{eager:false})
     user : User;

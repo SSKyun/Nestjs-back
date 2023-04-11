@@ -35,5 +35,11 @@ export class DeviceService {
         update.cval1 = deviceEntity.cval1;
         update.cval2 = deviceEntity.cval2;
         update.ctime = deviceEntity.ctime;
+
+        await this.deviceRepository.save(update);
+    }
+
+    async deleteDevice(id:number):Promise<void>{
+        const result = await this.deviceRepository.delete(id);
     }
 }

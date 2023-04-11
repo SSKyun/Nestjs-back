@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards, UsePipes } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards, UsePipes, Delete, ParseIntPipe } from "@nestjs/common";
 import { AccessTokenGuard } from "src/auth/guard/accessToken.guard";
 import { DeviceService } from "./device.service";
 import { CreateDeviceDto } from "./dto/create-device.dto";
@@ -24,5 +24,10 @@ export class DeviceController {
     @Patch(':id')
     update(@Param('id')id:number,@Body()deviceEntity:DeviceEntity){
         return this.deviceService.update(id,deviceEntity);
+    }
+
+    @Delete(':id')
+    deleteDevice(@Param('id',ParseIntPipe)id:number):Promise<void>{
+        return this.deviceService.deleteDevice(id);
     }
 }
