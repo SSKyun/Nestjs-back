@@ -10,19 +10,6 @@ import { MqttClient } from 'mqtt';
 @Module({
   imports : [
     TypeOrmModule.forFeature([BoardRepository]),
-    MqttModule.forRoot({
-      servers: [
-        {
-          host: '210.223.152.36',
-          port: 1883,
-        },
-      ],
-      clientId: 'nestjs-microservice-SungKyun',
-      username: 'evastick',
-      password: 'evastick!@3',
-      protocol: 'mqtt',
-      rejectUnauthorized: false,
-    }),
     AuthModule,
   ],
   controllers: [BoardsController],

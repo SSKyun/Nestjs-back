@@ -10,38 +10,12 @@ import {BoardStatus} from './board-status.enum';
 import { Board } from './board.entity';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { Request } from 'express';
-import { MqttService, Payload } from 'nest-mqtt';
-import { Observable } from 'rxjs';
-import { MessagePattern } from '@nestjs/microservices';
-
-interface IMqttMessage {
-    topic:string;
-    payload : Buffer;
-}
 
 @Controller('boards')
 @UseGuards(AccessTokenGuard)
 export class BoardsController {
     private logger = new Logger('BoardsController');
-    constructor(private boardsService: BoardsService,
-                private mqttService : MqttService) { }
-
-    async onModuleInit() {
-        await this.mqttService.subscribe('test');
-        this.logger.log('Successfully subscribed to MQTT topic');
-        }
-    
-    @Post('publish')
-    async publishMessage(@Body() message: any) {
-        await this.mqttService.publish('test', JSON.stringify(message));
-        this.logger.log(`Successfully published message: ${JSON.stringify(message)}`);
-    }
-
-    @MessagePattern('test')
-    handleMessage(message: any) {
-        const parsedMessage = JSON.parse(message);
-        this.logger.log(`Received message: ${JSON.stringify(parsedMessage)}`);
-    }
+    constructor(private boardsService: BoardsService,) { }
     
     @Get()
     getAllBoard(
