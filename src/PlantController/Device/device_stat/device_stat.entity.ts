@@ -24,6 +24,6 @@ export class Device_stat_Entity extends BaseEntity{
     @Column() // 급수 펌프 상태
     epump : number;
 
-    @ManyToOne(type=>Machine_Entity,machine => machine.device_stat,{eager:false})
-    m_number : Machine_Entity //제어기 내부번호.
+    // @ManyToOne(type=>Machine_Entity,machine => machine.device_stat,{eager:false})
+    // device : Machine_Entity //디바이스 이름
 }

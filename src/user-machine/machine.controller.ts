@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards,Delete } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards,Delete, UsePipes, ValidationPipe } from "@nestjs/common";
 import { AccessTokenGuard } from "src/auth/guard/accessToken.guard";
 import { Machine_Entity } from "./machine.entity";
 import { CreateMachineDto } from "./dto/create-machine.dto";
@@ -11,8 +11,10 @@ export class MachineController{
     constructor(private machineService : MachineService){}
 
     @Get()
-    getAllMachine():Promise<Machine_Entity[]>{
-        return this.machineService.getAllMachines();
+    getAllMachine(
+        @Req() req : Request
+    ):Promise<Machine_Entity[]>{
+        return this.machineService.getAllMachines(req.user);
     }
 
     @Post()

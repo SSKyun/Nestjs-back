@@ -11,6 +11,7 @@ import { IrrigationModule } from './PlantController/irrigation/irrigation.module
 import { CommentsModule } from './comments/comments.module';
 import { MqttModule } from 'nest-mqtt';
 import { DeviceModule } from './PlantController/Device/device.module';
+import { MachineModule } from './user-machine/machine.module';
 
 
 @Module({
@@ -20,6 +21,7 @@ import { DeviceModule } from './PlantController/Device/device.module';
     IrrigationModule,
     CommentsModule,
     DeviceModule,
+    MachineModule,
     MqttModule.forRoot({
       servers: [
         {

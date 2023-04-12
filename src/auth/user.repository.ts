@@ -22,7 +22,7 @@ export class UserRepository extends Repository<User>{
 
     
     async createUser(authCredentialsDto : AuthCredentialsDto){
-        const { username, nickname, phone_number, address } = authCredentialsDto;
+        const { username, nickname, phone_number } = authCredentialsDto;
         const salt = await bcrypt.genSalt();
         // const hashedPassword = await bcrypt.hash(password, salt);
         
@@ -31,7 +31,6 @@ export class UserRepository extends Repository<User>{
             //password : hashedPassword,
             nickname,
             phone_number,
-            address
         });
 
         try {

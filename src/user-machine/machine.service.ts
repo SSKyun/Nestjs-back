@@ -10,11 +10,19 @@ export class MachineService{
         @InjectRepository(MachineRepository)
         private machineRepository : MachineRepository){}
 
-    async getAllMachines():Promise<Machine_Entity[]>{
-        return this.machineRepository.find({relations : ['user']});
+    async getAllMachines(
+        user:{[key:string]:any}
+    ):Promise<Machine_Entity[]>{
+        const query = this.machineRepository.createQueryBuilder('machine');
+        query.where('machine.userId = :userId', { userId: user['sub'] });
+        const machines = await query.getMany();
+        return machines;
     }
 
-    createMachine(createMachineDto:CreateMachineDto,user:{[key:string]:any}):Promise<Machine_Entity>{
+    createMachine(
+        createMachineDto:CreateMachineDto,
+        user:{[key:string]:any}
+    ):Promise<Machine_Entity>{
         return this.machineRepository.createMachine(createMachineDto,user);
     }
 

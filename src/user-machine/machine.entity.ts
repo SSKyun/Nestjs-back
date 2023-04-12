@@ -11,11 +11,11 @@ export class Machine_Entity extends BaseEntity {
     user : User;
 
     @Column()
-    m_number : string;
+    device : string;
 
     @Column()
     m_address : string;
 
-    @OneToMany(type=>Device_stat_Entity,device=>device.m_number,{eager:true})
-    device_stat : Device_stat_Entity[]
+    // @OneToMany(type=>Device_stat_Entity,device=>device.device,{eager:true})
+    // device_stat : Device_stat_Entity[]
 }

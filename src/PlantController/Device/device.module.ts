@@ -4,6 +4,7 @@ import { DeviceRepository } from "./device.repository";
 import { AuthModule } from "src/auth/auth.module";
 import { DeviceController } from "./device.controller";
 import { DeviceService } from "./device.service";
+import { AppService } from "src/app.service";
 
 @Module({
     imports:[

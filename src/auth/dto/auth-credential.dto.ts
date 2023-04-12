@@ -21,5 +21,5 @@ export class AuthCredentialsDto{
 
     phone_number : string;
 
-    address : string;
+    // address : string;
 }

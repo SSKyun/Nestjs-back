@@ -11,9 +11,9 @@ export class MachineRepository extends Repository<Machine_Entity>{
     }
     async createMachine(createMachineDto:CreateMachineDto,user:{[key:string]:any}):Promise<Machine_Entity>{
         const user0 = await User.findOneBy({id:user['sub']});
-        const {m_number,m_address} = createMachineDto;
+        const {device,m_address} = createMachineDto;
         const machine = this.create({
-            m_number,
+            device,
             m_address,
             user : user0
         });

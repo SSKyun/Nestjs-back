@@ -1,15 +1,18 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, OnModuleInit } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeviceRepository } from "./device.repository";
 import { CreateDeviceDto } from "./dto/create-device.dto";
 import { DeviceEntity } from "./device.entity";
+import { MqttClient, connect } from "mqtt";
 
 @Injectable()
-export class DeviceService {
+export class DeviceService{
+    private client: MqttClient;
     constructor(
         @InjectRepository(DeviceRepository)
         private deviceRepository : DeviceRepository,
     ){}
+    
 
     async getAllDevices(user:{[key:string]:any}):Promise<DeviceEntity[]>{
         const query = this.deviceRepository.createQueryBuilder('device');

@@ -34,10 +34,10 @@ export class User extends BaseEntity {
     @Column()
     phone_number : string;
 
-    @Column() //총 보유 제어기 수량
+    @Column({ nullable : true}) //총 보유 제어기 수량
     umachine_num : number;
 
-    @Column() //통신 서비스 종료일
+    @Column({ nullable : true}) //통신 서비스 종료일
     uend_date : string;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

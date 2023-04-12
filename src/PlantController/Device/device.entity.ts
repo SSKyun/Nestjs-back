@@ -18,16 +18,16 @@ export class DeviceEntity extends BaseEntity{
     @Column({nullable : true})
     wpump : number;
 
-    @Column()
+    @Column({nullable : true})
     wval1 : number
 
-    @Column()
+    @Column({nullable : true})
     wtime1 : number;
 
-    @Column()
+    @Column({nullable : true})
     wval2 : number;
 
-    @Column()
+    @Column({nullable : true})
     wtime2 : number;
 
     @Column({nullable : true})
