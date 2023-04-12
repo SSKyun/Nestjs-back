@@ -8,7 +8,7 @@ export class AppService implements OnModuleInit {
   constructor() {}
 
   async onModuleInit() {
-    this.client = connect('mqtt://210.223.152.36:1883', {
+    this.client = connect('mqtt://210.223.152.36:1884', {
       clientId: 'nestjs-microservice-SungKyun',
       username: 'evastick',
       password: 'evastick!@3',
@@ -29,6 +29,8 @@ export class AppService implements OnModuleInit {
     this.client.on('message', (topic, message) => {
       console.log(`Received a message on topic "${topic}": ${message.toString()}`);
     });
+    // /test 로 JSON 형태로 보내야 댐.
+    this.client.publish('/test',`{"message" : "laalala"}`);
   }
 }
 
