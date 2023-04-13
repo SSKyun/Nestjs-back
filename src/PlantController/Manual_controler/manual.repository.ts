@@ -12,14 +12,14 @@ export class ManualRepository extends Repository<Manual_Entity>{
     }
     async createManual(createManualDto:CreateManualDto,user:{[key:string]:any}):Promise<Manual_Entity>{
         const user0 = await User.findOneBy({id:user['sub']});
-        const {machine_id,etime,wtime1,wtime2,ctime1,ctime2} = createManualDto;
+        const {device,rwtime1,rwtime2,rcval1,rcval2,rctime} = createManualDto;
         const manual = this.create({
-            machine_id,
-            etime,
-            wtime1,
-            wtime2,
-            ctime1,
-            ctime2,
+            device,
+            rwtime1,
+            rwtime2,
+            rcval1,
+            rcval2,
+            rctime,
             user : user0
         })
         await this.save(manual);

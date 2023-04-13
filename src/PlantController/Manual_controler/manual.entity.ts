@@ -7,27 +7,27 @@ export class Manual_Entity extends BaseEntity{
     id : number;
 
     @Column() //8글자 제한
-    machine_id : string;
+    device : string;
 
-    @Column()
-    etime : number;
+    @Column({nullable : true})
+    rwtime1 : number;
 
-    @Column()
-    wtime1 : number;
+    @Column({nullable : true})
+    rwtime2 : number;
 
-    @Column()
-    wtime2 : number;
+    @Column({nullable : true})
+    rcval1 : number;
 
-    @Column()
-    ctime1 : number;
+    @Column({nullable : true})
+    rcval2 : number
 
-    @Column()
-    ctime2 : number;
+    @Column({nullable : true})
+    rctime : number
 
-    @Column()//누적 시간
+    @Column({nullable : true})//누적 시간
     accumulated_time : number;
 
-    @Column()//남은 시간
+    @Column({nullable : true})//남은 시간
     r_time : number;
 
     @ManyToOne(type=>User,user=>user.manual,{eager:false})

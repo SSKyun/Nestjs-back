@@ -2,15 +2,15 @@ import { IsNotEmpty } from "class-validator";
 
 export class CreateManualDto {
     @IsNotEmpty()
-    machine_id : string;
+    device : string;
 
-    etime : number;
+    rwtime1 : number;
 
-    wtime1 : number;
+    rwtime2 : number;
 
-    wtime2 : number;
+    rcval1 : number;
 
-    ctime1 : number;
+    rcval2 : number;
 
-    ctime2 : number;
+    rctime : number;
 }
