@@ -5,7 +5,7 @@ import { BaseEntity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { minLength } from 'class-validator';
 import { Comment } from 'src/comments/comment.entity';
 import { Irrigation_m } from 'src/PlantController/irrigation/irrigation_manually/irrigation_m.entity';
-import { DeviceEntity } from 'src/PlantController/Device/device.entity';
+import { Device_Stat_Entity } from 'src/PlantController/Device/device.entity';
 import { Envir_Entity } from 'src/statistics/envir_stat.entity';
 import { Manual_Entity } from 'src/PlantController/Manual_controler/manual.entity';
 import { Machine_Entity } from 'src/user-machine/machine.entity';
@@ -71,8 +71,8 @@ export class User extends BaseEntity {
     @OneToMany(type=>Manual_Entity,manual=>manual.user,{eager:true})
     manual : Manual_Entity[]
 
-    @OneToMany(type=>DeviceEntity,device=>device.user,{eager:true})
-    device : DeviceEntity[]
+    @OneToMany(type=>Device_Stat_Entity,device=>device.user,{eager:true})
+    device : Device_Stat_Entity[]
 
     @OneToMany(type=>Envir_Entity,envir_stat => envir_stat.user, {eager:true})
     envir_stats : Envir_Entity[]

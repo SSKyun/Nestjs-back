@@ -1,8 +1,9 @@
+import { ManualService } from './../Manual_controler/manual.service';
 import { Injectable, OnModuleInit } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeviceRepository } from "./device.repository";
 import { CreateDeviceDto } from "./dto/create-device.dto";
-import { DeviceEntity } from "./device.entity";
+import { Device_Stat_Entity } from "./device.entity";
 import { MqttClient, connect } from "mqtt";
 
 @Injectable()
@@ -11,21 +12,34 @@ export class DeviceService{
     constructor(
         @InjectRepository(DeviceRepository)
         private deviceRepository : DeviceRepository,
+        // private manualService : ManualService
     ){}
     
 
-    async getAllDevices(user:{[key:string]:any}):Promise<DeviceEntity[]>{
+    async testFunction(){
+        // this.client.on('connect',()=>{
+        //     this.client.subscribe('test2',(err)=>{
+        //         if(err){
+        //             console.log(`error`,err);
+        //         }else{
+        //             console.log('device subscribed to test2');
+        //         }
+        //     })
+        // })
+    }
+
+    async getAllDevices(user:{[key:string]:any}):Promise<Device_Stat_Entity[]>{
         const query = this.deviceRepository.createQueryBuilder('device');
         query.where('device.userId = :userId',{userId:user['sub']});
         const devices = await query.getMany();
         return devices;
     }
 
-    createDevice(createDeviceDto : CreateDeviceDto,user:{[key : string]:any}):Promise<DeviceEntity>{
+    createDevice(createDeviceDto : CreateDeviceDto,user:{[key : string]:any}):Promise<Device_Stat_Entity>{
         return this.deviceRepository.createDevice(createDeviceDto,user);
     }
 
-    async update(id:number,deviceEntity:DeviceEntity):Promise<void>{
+    async update(id:number,deviceEntity:Device_Stat_Entity):Promise<void>{
         const update = await this.deviceRepository.findOneBy({id});
         update.device = deviceEntity.device;
         update.epump = deviceEntity.epump;

@@ -2,7 +2,7 @@ import { User } from "src/auth/user.entity";
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class DeviceEntity extends BaseEntity{
+export class Device_Stat_Entity extends BaseEntity{
     @PrimaryGeneratedColumn()
     id : number;
 

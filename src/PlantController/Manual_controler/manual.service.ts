@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ManualRepository } from './manual.repository';
 import { Manual_Entity } from './manual.entity';
 import { MqttClient, connect } from 'mqtt';
+
 @Injectable()
 export class ManualService implements OnModuleInit{
     private client : MqttClient;
@@ -22,6 +23,8 @@ export class ManualService implements OnModuleInit{
         rejectUnauthorized: false,
         });
 
+        const manuals = await this.manualRepository.find();
+        manuals.
         this.client.on('connect', () => {
         this.client.subscribe('test', (err) => {
             if (err) {
@@ -66,11 +69,11 @@ export class ManualService implements OnModuleInit{
     }
 
     async checkAndSendMessage() {
-        console.log("매분 실행");
         const manuals = await this.manualRepository.find();
         manuals.forEach(async (manual) => {
           const { rwtime1, rwtime2, rctime } = manual;
-          if (rwtime1 >= 0 || rwtime2 >= 0 || rctime >= 0) {
+          if (rwtime1 > 0 || rwtime2 > 0 || rctime > 0) {
+            console.log("매분 실행",manuals);
             const payload = {
               device: manual.device,
               rwtime1: rwtime1 - 1,
@@ -87,9 +90,9 @@ export class ManualService implements OnModuleInit{
               "rcval2": "${manual.rcval2}",
               "rctime": "${rctime - 1}",
             }`
-            await this.client.publish('/test', JSON.stringify(payload));
+            await this.client.publish('/test', Mqtt_payload,{qos : 1});
             await this.manualRepository.update(manual.id, payload);
-          }
+          }//log파일로 go
         });
       }
 }
