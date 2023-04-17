@@ -4,44 +4,82 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ManualRepository } from './manual.repository';
 import { Manual_Entity } from './manual.entity';
 import { MqttClient, connect } from 'mqtt';
+import * as fs from 'fs';
+import * as path from 'path';
+
+const LOG_DIR = path.join(process.cwd(), 'log');
+const LOG_FILE_NAME = 'mqtt.log';
+const MAX_LOG_SIZE = 1024 * 1024 * 10;
+const LOG_FILE_PATH = path.join(LOG_DIR, LOG_FILE_NAME);
 
 @Injectable()
-export class ManualService implements OnModuleInit{
-    private client : MqttClient;
-    private intervalId: NodeJS.Timeout;
-    constructor(
-        @InjectRepository(ManualRepository)
-        private manualRepository : ManualRepository
-    ){}
+export class ManualService implements OnModuleInit {
+  private client: MqttClient;
+  private intervalId: NodeJS.Timeout;
+  private logFileName: string;
+  private logStream: fs.WriteStream;
+  private logSize: number;
 
-    async onModuleInit() {
-        this.client = connect('mqtt://210.223.152.36:1884', {
-        clientId: 'nestjs-microservice-SungKyun',
-        username: 'evastick',
-        password: 'evastick!@3',
-        protocol: 'mqtt',
-        rejectUnauthorized: false,
-        });
+  constructor(
+    @InjectRepository(ManualRepository)
+    private manualRepository: ManualRepository,
+  ) {}
 
-        const manuals = await this.manualRepository.find();
-        manuals.
-        this.client.on('connect', () => {
-        this.client.subscribe('test', (err) => {
-            if (err) {
-            console.log(`error subscribing to test`, err);
-            } else {
-            console.log(`successfully subscribed to test`);
-            }
-        });
-        });
-
-        this.client.on('message', (topic, message) => {
-        console.log(`Received a message on topic "${topic}": ${message.toString()}`);
-        });
-        this.intervalId = setInterval(() => {
-            this.checkAndSendMessage();
-        }, 60 * 1000);
+  async onModuleInit() {
+    if (!fs.existsSync(LOG_DIR)) {
+      fs.mkdirSync(LOG_DIR);
     }
+
+    this.logStream = fs.createWriteStream(LOG_FILE_PATH, { flags: 'a' });
+
+    this.client = connect('mqtt://210.223.152.36:1884', {
+      clientId: 'nestjs-microservice-SungKyun',
+      username: 'evastick',
+      password: 'evastick!@3',
+      protocol: 'mqtt',
+      rejectUnauthorized: false,
+    });
+
+    this.client.on('connect', () => {
+      this.client.subscribe('test', (err) => {
+        if (err) {
+          console.log(`error subscribing to test`, err);
+        } else {
+          console.log(`successfully subscribed to test`);
+        }
+      });
+    });
+
+    this.client.on('message', (topic, message) => {
+      console.log(`Received a message on topic "${topic}": ${message.toString()}`);
+    
+      if (!this.logStream) {
+        const logFileName = `./log/${new Date().toISOString()}.log`;
+        this.logStream = fs.createWriteStream(logFileName);
+        console.log(`Created log file: ${logFileName}`);
+      }
+    
+      const logData = `${new Date().toISOString()} - ${message.toString()}\n`;
+      this.logStream.write(logData);
+      this.logSize += logData.length;
+    
+      if (this.logSize > MAX_LOG_SIZE) {
+        this.logStream.end(() => {
+          const parts = this.logFileName.split('.');
+          const ext = parts.pop();
+          const newFileName = `${parts.join('.')}_${new Date().toISOString()}.${ext}`;
+          fs.renameSync(this.logFileName, newFileName);
+          this.logStream = null;
+          this.logSize = 0;
+          console.log(`Renamed log file: ${this.logFileName} -> ${newFileName}`);
+        });
+      }
+    });
+
+    this.intervalId = setInterval(() => {
+      this.checkAndSendMessage();
+    }, 60 * 1000);
+  }
 
     async getAllManuals():Promise<Manual_Entity[]>{
         return this.manualRepository.find({relations:['user']});
