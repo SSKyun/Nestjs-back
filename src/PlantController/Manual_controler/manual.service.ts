@@ -31,7 +31,7 @@ export class ManualService implements OnModuleInit {
     }
 
     this.logStream = fs.createWriteStream(LOG_FILE_PATH, { flags: 'a' });
-
+    const manaul = this.manualRepository.find();
     this.client = connect('mqtt://210.223.152.36:1884', {
       clientId: 'nestjs-microservice-SungKyun',
       username: 'evastick',
@@ -39,6 +39,8 @@ export class ManualService implements OnModuleInit {
       protocol: 'mqtt',
       rejectUnauthorized: false,
     });
+    //수동조작 /valve_control/manual/디바이스ID
+    //스케줄조작 /valve_control/schedule/디바이스ID
 
     this.client.on('connect', () => {
       this.client.subscribe('test', (err) => {
@@ -120,15 +122,8 @@ export class ManualService implements OnModuleInit {
               rcval2: manual.rcval2,
               rctime: rctime - 1,
             };
-            const Mqtt_payload = `{
-              "device": "${manual.device}",
-              "rwtime1": "${rwtime1 - 1}",
-              "rwtime2": "${rwtime2 - 1}",
-              "rcval1": "${manual.rcval1}",
-              "rcval2": "${manual.rcval2}",
-              "rctime": "${rctime - 1}",
-            }`
-            await this.client.publish('/test', Mqtt_payload,{qos : 1});
+            const Mqtt_payload = `{"device": "${manual.device}","rwtime1": "${rwtime1 - 1}","rwtime2": "${rwtime2 - 1}","rcval1": "${manual.rcval1}","rcval2": "${manual.rcval2}","rctime": "${rctime - 1}"}`
+            await this.client.publish(`/valve_control/manual/${manual.device}`, Mqtt_payload,{qos : 1});
             await this.manualRepository.update(manual.id, payload);
           }//log파일로 go
         });
