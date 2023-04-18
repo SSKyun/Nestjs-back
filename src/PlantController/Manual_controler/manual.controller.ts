@@ -11,8 +11,8 @@ export class ManualController {
     constructor(private manualService:ManualService){}
 
     @Get()
-    getAllManual():Promise<Manual_Entity[]>{
-        return this.manualService.getAllManuals();
+    getAllManual(@Req() req: Request):Promise<Manual_Entity[]>{
+        return this.manualService.getAllManuals(req.user);
     }
 
     @Post()

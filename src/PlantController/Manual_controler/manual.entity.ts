@@ -24,12 +24,6 @@ export class Manual_Entity extends BaseEntity{
     @Column({nullable : true})
     rctime : number
 
-    @Column({nullable : true})//누적 시간
-    accumulated_time : number;
-
-    @Column({nullable : true})//남은 시간
-    r_time : number;
-
     @ManyToOne(type=>User,user=>user.manual,{eager:false})
     user : User;
 }

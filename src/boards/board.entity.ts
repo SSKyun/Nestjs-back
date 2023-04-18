@@ -17,6 +17,9 @@ export class Board extends BaseEntity {
     @Column({default : "PUBLIC"})
     status: string;
 
+    @Column({nullable : true})
+    admin_check : boolean;
+
     @CreateDateColumn()
     createDate : Date;
 

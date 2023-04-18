@@ -83,8 +83,13 @@ export class ManualService implements OnModuleInit {
     }, 60 * 1000);
   }
 
-    async getAllManuals():Promise<Manual_Entity[]>{
-        return this.manualRepository.find({relations:['user']});
+    async getAllManuals(
+      user: {[key:string]:any}
+    ):Promise<Manual_Entity[]>{
+      const query = this.manualRepository.createQueryBuilder('manual');
+      query.where('manual.userId = :userId',{userId:user['sub']});
+      const manuals = await query.getMany();
+      return manuals;
     }
 
     createManual(createManualDto : CreateManualDto,user:{[key:string]:any}):Promise<Manual_Entity>{
@@ -102,8 +107,6 @@ export class ManualService implements OnModuleInit {
         update.rwtime2 = manual.rwtime2;
         update.rcval1 = manual.rcval1;
         update.rcval2 = manual.rcval2;
-        update.accumulated_time = manual.accumulated_time;
-        update.r_time = manual.r_time;
 
         await this.manualRepository.save(update);
     }

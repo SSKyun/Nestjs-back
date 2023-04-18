@@ -18,8 +18,6 @@ export class BoardsService {
         private readonly mqttService: MqttService,
     ){}//boardservice안에서 repository 사용가능하게함.
 
-    
-
     async findOne(id:number): Promise<Board>{
         return this.boardRepository.findOneBy({id});
     }
@@ -71,6 +69,7 @@ export class BoardsService {
         update.title = board.title;
         update.description = board.description;
         update.status = board.status;
+        update.admin_check = board.admin_check;
 
         await this.boardRepository.save(update);
     }

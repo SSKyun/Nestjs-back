@@ -13,6 +13,7 @@ import { MqttModule } from 'nest-mqtt';
 import { DeviceModule } from './PlantController/Device/device.module';
 import { MachineModule } from './user-machine/machine.module';
 import { ManualModule } from './PlantController/Manual_controler/manual.module';
+import { EnvirModule } from './statistics/envir_stat.module';
 
 
 @Module({
@@ -24,16 +25,17 @@ import { ManualModule } from './PlantController/Manual_controler/manual.module';
     DeviceModule,
     MachineModule,
     ManualModule,
+    EnvirModule,
     MqttModule.forRoot({
       servers: [
         {
-          host: '210.223.152.36',
-          port: 1883,
+          host: process.env.MQTT_HOST,
+          port: parseInt(process.env.MQTT_PORT_M),
         },
       ],
-      clientId: 'nestjs-microservice-SungKyun',
-      username: 'evastick',
-      password: 'evastick!@3',
+      clientId: process.env.MQTT_CLIENT_ID,
+      username: process.env.MQTT_USER_NAME,
+      password: process.env.MQTT_PASSWORD,
       protocol: 'mqtt',
       rejectUnauthorized: false,
     }),
