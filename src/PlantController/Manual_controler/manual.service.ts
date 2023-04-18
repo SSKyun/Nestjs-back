@@ -6,11 +6,14 @@ import { Manual_Entity } from './manual.entity';
 import { MqttClient, connect } from 'mqtt';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as dotenv from 'dotenv';
 
+dotenv.config();
 const LOG_DIR = path.join(process.cwd(), 'log');
 const LOG_FILE_NAME = 'mqtt.log';
 const MAX_LOG_SIZE = 1024 * 1024 * 10;
 const LOG_FILE_PATH = path.join(LOG_DIR, LOG_FILE_NAME);
+
 
 @Injectable()
 export class ManualService implements OnModuleInit {
@@ -31,16 +34,13 @@ export class ManualService implements OnModuleInit {
     }
 
     this.logStream = fs.createWriteStream(LOG_FILE_PATH, { flags: 'a' });
-    const manaul = this.manualRepository.find();
-    this.client = connect('mqtt://210.223.152.36:1884', {
-      clientId: 'nestjs-microservice-SungKyun',
-      username: 'evastick',
-      password: 'evastick!@3',
+    this.client = connect(`mqtt://${process.env.MQTT_HOST}:${process.env.MQTT_PORT}`, {
+      clientId: process.env.MQTT_CLIENT_ID,
+      username: process.env.MQTT_USER_NAME,
+      password: process.env.MQTT_PASSWORD,
       protocol: 'mqtt',
       rejectUnauthorized: false,
     });
-    //수동조작 /valve_control/manual/디바이스ID
-    //스케줄조작 /valve_control/schedule/디바이스ID
 
     this.client.on('connect', () => {
       this.client.subscribe('test', (err) => {
