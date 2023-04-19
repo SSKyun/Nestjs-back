@@ -107,28 +107,31 @@ export class ManualService implements OnModuleInit {
         update.rwtime2 = manual.rwtime2;
         update.rcval1 = manual.rcval1;
         update.rcval2 = manual.rcval2;
+        update.rctime = manual.rctime;
 
         await this.manualRepository.save(update);
     }
 
     async checkAndSendMessage() {
-        const manuals = await this.manualRepository.find();
-        manuals.forEach(async (manual) => {
-          const { rwtime1, rwtime2, rctime } = manual;
-          if (rwtime1 > 0 || rwtime2 > 0 || rctime > 0) {
-            console.log("매분 실행",manuals);
-            const payload = {
-              device: manual.device,
-              rwtime1: rwtime1 - 1,
-              rwtime2: rwtime2 - 1,
-              rcval1: manual.rcval1,
-              rcval2: manual.rcval2,
-              rctime: rctime - 1,
-            };
-            const Mqtt_payload = `{"device": "${manual.device}","rwtime1": "${rwtime1 - 1}","rwtime2": "${rwtime2 - 1}","rcval1": "${manual.rcval1}","rcval2": "${manual.rcval2}","rctime": "${rctime - 1}"}`
-            await this.client.publish(`/valve_control/manual/${manual.device}`, Mqtt_payload,{qos : 1});
-            await this.manualRepository.update(manual.id, payload);
-          }//log파일로 go
-        });
-      }
+      const manuals = await this.manualRepository.find();
+      manuals.forEach(async (manual) => {
+        const { rwtime1, rwtime2, rctime } = manual;
+        if (rwtime1 > 0 || rwtime2 > 0 || rctime > 0) {
+          console.log("매분 실행",manuals);
+          const payload = {
+            device: manual.device,
+            rwtime1: rwtime1 > 0 ? rwtime1 - 1 : 0,
+            rwtime2: rwtime2 > 0 ? rwtime2 - 1 : 0,
+            rcval1: manual.rcval1,
+            rcval2: manual.rcval2,
+            rctime: rctime > 0 ? rctime - 1 : 0,
+            accumulated_time : manual.accumulated_time + 1
+          };
+          const Mqtt_payload = `{"device": "${manual.device}","rwtime1": "${payload.rwtime1}","rwtime2": "${payload.rwtime2}","rcval1": "${manual.rcval1}","rcval2": "${manual.rcval2}","rctime": "${payload.rctime}","accumulated_time": "${manual.accumulated_time}"}`
+          
+          await this.client.publish(`/valve_control/manual/${manual.device}`, Mqtt_payload,{qos : 1});
+          await this.manualRepository.update(manual.id, payload);
+        }
+      });
+    }
 }

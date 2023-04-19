@@ -24,6 +24,9 @@ export class Manual_Entity extends BaseEntity{
     @Column({nullable : true})
     rctime : number
 
+    @Column({nullable : true})
+    accumulated_time : number;
+
     @ManyToOne(type=>User,user=>user.manual,{eager:false})
     user : User;
 }
