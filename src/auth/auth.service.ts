@@ -119,6 +119,7 @@ export class AuthService {
       const update = await this.userRepository.findOneBy({id});
       update.nickname = user.nickname;
       update.phone_number = user.phone_number;
+      update.umachine_num = user.umachine_num;
 
       await this.userRepository.save(update);
     }
