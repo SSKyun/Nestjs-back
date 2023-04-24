@@ -1,5 +1,5 @@
 import { User } from "src/auth/user.entity";
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, BeforeUpdate, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Manual_Entity extends BaseEntity{
@@ -26,6 +26,19 @@ export class Manual_Entity extends BaseEntity{
 
     @Column({nullable : true})
     accumulated_time : number;
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    updatedAt: Date;
+
+    @BeforeUpdate()
+    updateTimestamp() {
+        this.updatedAt = new Date();
+    }
+
+    async save(): Promise<this> {
+        this.updatedAt = new Date();
+        return super.save();
+    }
 
     @ManyToOne(type=>User,user=>user.manual,{eager:false})
     user : User;

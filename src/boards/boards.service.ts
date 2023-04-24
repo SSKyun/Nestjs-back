@@ -15,7 +15,6 @@ export class BoardsService {
     constructor(
         @InjectRepository(BoardRepository)
         private boardRepository : BoardRepository,
-        private readonly mqttService: MqttService,
     ){}//boardservice안에서 repository 사용가능하게함.
 
     async findOne(id:number): Promise<Board>{

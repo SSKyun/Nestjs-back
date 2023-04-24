@@ -43,44 +43,83 @@ export class ManualService implements OnModuleInit {
     });
 
     this.client.on('connect', () => {
-      this.client.subscribe('test', (err) => {
+      this.client.subscribe('MQTT SERVER', (err) => {
         if (err) {
-          console.log(`error subscribing to test`, err);
+          console.log(`error subscribing to MQTT SERVER`, err);
         } else {
-          console.log(`successfully subscribed to test`);
+          console.log(`successfully subscribed to MQTT SERVER`);
         }
       });
+      this.client.subscribe(`/valve_control/start/+`,(err)=>{
+        if (err) {
+          console.log(`error subscribing to START`, err);
+        } else {
+          console.log(`successfully subscribed to START`);
+        }
+      })
+      this.client.subscribe(`/valve_control/log/+`,(err)=>{
+        if (err) {
+          console.log(`error subscribing to LOG`, err);
+        } else {
+          console.log(`successfully subscribed to LOG`);
+        }
+      })
+      this.client.subscribe(`/valve_control/error/+`,(err)=>{
+        if (err) {
+          console.log(`error subscribing to ERROR`, err);
+        } else {
+          console.log(`successfully subscribed to ERROR`);
+        }
+      })
     });
+    
 
     this.client.on('message', (topic, message) => {
       console.log(`Received a message on topic "${topic}": ${message.toString()}`);
-    
+      try {
+        if (topic.startsWith('/valve_control/log/')) {
+          const data = JSON.parse(message.toString());
+          const payload = JSON.stringify({
+            device: data.device,
+            rwtime1: data.rwtime1,
+            rwtime2: data.rwtime2,
+            rcval1: data.rcval1,
+            rcval2: data.rcval2,
+            rctime: data.rctime
+          });
+          this.client.publish(`/valve_control/check/${data.device}`, payload, { qos: 1 });
+        }
+      } catch (err) {
+        console.log(`Error parsing message data : ${err}`);
+      }
+
       if (!this.logStream) {
         const logFileName = `./log/${new Date().toISOString()}.log`;
         this.logStream = fs.createWriteStream(logFileName);
         console.log(`Created log file: ${logFileName}`);
       }
-    
-      const logData = `${new Date().toISOString()} - ${message.toString()}\n`;
-      this.logStream.write(logData);
-      this.logSize += logData.length;
-    
-      if (this.logSize > MAX_LOG_SIZE) {
-        this.logStream.end(() => {
-          const parts = this.logFileName.split('.');
-          const ext = parts.pop();
-          const newFileName = `${parts.join('.')}_${new Date().toISOString()}.${ext}`;
-          fs.renameSync(this.logFileName, newFileName);
-          this.logStream = null;
-          this.logSize = 0;
-          console.log(`Renamed log file: ${this.logFileName} -> ${newFileName}`);
-        });
+      if (topic.startsWith('/valve_control/start/') || topic.startsWith('/valve_control/end/')) {
+        const logData = `${new Date().toISOString()} - ${message.toString()}\n`;
+        this.logStream.write(logData);
+        this.logSize += logData.length;
+      
+        if (this.logSize > MAX_LOG_SIZE) {
+          this.logStream.end(() => {
+            const parts = this.logFileName.split('.');
+            const ext = parts.pop();
+            const newFileName = `${parts.join('.')}_${new Date().toISOString()}.${ext}`;
+            fs.renameSync(this.logFileName, newFileName);
+            this.logStream = null;
+            this.logSize = 0;
+            console.log(`Renamed log file: ${this.logFileName} -> ${newFileName}`);
+          });
+        }
       }
     });
 
-    this.intervalId = setInterval(() => {
-      this.checkAndSendMessage();
-    }, 60 * 1000);
+    // this.intervalId = setInterval(() => {
+    //   this.checkAndSendMessage();
+    // }, 1000);
   }
 
     async getAllManuals(
@@ -100,9 +139,9 @@ export class ManualService implements OnModuleInit {
         const result = await this.manualRepository.delete(id);
     }
 
-    async update(id:number,manual:Manual_Entity):Promise<void>{
+    async update(id:number,manual:Manual_Entity):Promise<number>{
         const update = await this.manualRepository.findOneBy({id});
-        update.device = manual.device;
+        update.device = manual.device; // 디바이스명은 바꿀 수 없어야하나?
         update.rwtime1 = manual.rwtime1;
         update.rwtime2 = manual.rwtime2;
         update.rcval1 = manual.rcval1;
@@ -110,20 +149,25 @@ export class ManualService implements OnModuleInit {
         update.rctime = manual.rctime;
 
         await this.manualRepository.save(update);
+        const Mqtt_payload = `{"device": "${manual.device}","rwtime1": "${manual.rwtime1}","rwtime2": "${manual.rwtime2}","rcval1": "${manual.rcval1}","rcval2": "${manual.rcval2}","rctime": "${manual.rctime}","accumulated_time": "${manual.accumulated_time}"}`
+        await this.client.publish(`/valve_control/manual/${manual.device}`, Mqtt_payload,{qos : 1});
+        return 200;
     }
 
     async checkAndSendMessage() {
       const manuals = await this.manualRepository.find();
       manuals.forEach(async (manual) => {
-        const { rwtime1, rwtime2, rctime } = manual;
+        const { rwtime1, rwtime2, rctime, accumulated_time } = manual;
+        manual.accumulated_time + 1;
         let rcval1 = manual.rcval1;
         let rcval2 = manual.rcval2;
         if (rwtime1 === 0 && rwtime2 === 0 && rctime === 0) {
           rcval1 = 0;
           rcval2 = 0;
+          // const Mqtt_payload = `{"device": "${manual.device}","rwtime1": "${manual.rwtime1}","rwtime2": "${manual.rwtime2}","rcval1": "${rcval1}","rcval2": "${rcval2}","rctime": "${manual.rctime}","accumulated_time": "${manual.accumulated_time}"}`
+          // await this.client.publish(`/valve_control/manual/${manual.device}`, Mqtt_payload,{qos : 1});
         }
         if (rwtime1 > 0 || rwtime2 > 0 || rctime > 0) {
-          console.log("매분 실행",manuals);
           const payload = {
             device: manual.device,
             rwtime1: rwtime1 > 0 ? rwtime1 - 1 : 0,
@@ -133,9 +177,14 @@ export class ManualService implements OnModuleInit {
             rctime: rctime > 0 ? rctime - 1 : 0,
             accumulated_time : manual.accumulated_time + 1
           };
-          const Mqtt_payload = `{"device": "${manual.device}","rwtime1": "${payload.rwtime1}","rwtime2": "${payload.rwtime2}","rcval1": "${rcval1}","rcval2": "${rcval2}","rctime": "${payload.rctime}","accumulated_time": "${manual.accumulated_time}"}`
+          if (manual.accumulated_time % 60 === 0) {
+            manual.accumulated_time = 0; 
+            await this.manualRepository.update(manual.id, payload);
+          } else {
+
+          }
+          const Mqtt_payload = `{"device": "${manual.device}","rwtime1": "${payload.rwtime1}","rwtime2": "${payload.rwtime2}","rcval1": "${rcval1}","rcval2": "${rcval2}","rctime": "${payload.rctime}","accumulated_time": "${payload.accumulated_time}"}`
           await this.client.publish(`/valve_control/manual/${manual.device}`, Mqtt_payload,{qos : 1});
-          await this.manualRepository.update(manual.id, payload);
         }
       });
     }
