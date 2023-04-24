@@ -21,6 +21,12 @@ export class Envir_Entity extends BaseEntity{
     @Column({type:'decimal',precision:3,scale:1})
     grow : number; //생장률
 
+    @Column({type:'decimal',precision:3,scale:1})
+    precipitaion : number; 
+
+    @Column({type:'decimal',precision:3,scale:1})
+    insolation : number; 
+
     @CreateDateColumn()
     created_at : Date;
 }

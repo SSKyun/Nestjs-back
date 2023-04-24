@@ -33,6 +33,8 @@ export class EnvirService{
         update.humidity = envir_Entity.humidity;
         update.soil_humid = envir_Entity.soil_humid;
         update.grow = envir_Entity.grow;
+        update.precipitaion = envir_Entity.precipitaion;
+        update.insolation = envir_Entity.insolation;
 
         await this.envirRepository.save(update);
     }

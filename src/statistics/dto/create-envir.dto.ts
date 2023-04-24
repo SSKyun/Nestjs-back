@@ -10,4 +10,8 @@ export class CreateEnvirDto{
 
     grow : number; //생장률
 
+    precipitaion : number; 
+
+    insolation : number; 
+
 }

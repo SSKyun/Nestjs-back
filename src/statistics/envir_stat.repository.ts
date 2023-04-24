@@ -11,12 +11,14 @@ export class EnvirRepository extends Repository<Envir_Entity>{
     }
     async createEnvir(createEnvirDto:CreateEnvirDto,user:{[key:string]:any}):Promise<Envir_Entity>{
         const user0 = await User.findOneBy({id:user['sub']});
-        const {temperature,humidity,soil_humid,grow} = createEnvirDto;
+        const {temperature,humidity,soil_humid,grow,precipitaion,insolation} = createEnvirDto;
         const envir = this.create({
             temperature,
             humidity,
             soil_humid,
             grow,
+            precipitaion,
+            insolation,
             user:user0
         })
         await this.save(envir);

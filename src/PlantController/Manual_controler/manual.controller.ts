@@ -30,4 +30,9 @@ export class ManualController {
     deleteEnvir(@Param('id',ParseIntPipe)id:number):Promise<void>{
         return this.manualService.deleteManual(id);
     }
+
+    // @Get()
+    // showLogManual(@Req() req:Request):Promise<Manual_Entity[]>{
+    //     return this.manualService.showLogManual(req.user)
+    // }
 }

@@ -117,9 +117,6 @@ export class ManualService implements OnModuleInit {
       }
     });
 
-    // this.intervalId = setInterval(() => {
-    //   this.checkAndSendMessage();
-    // }, 1000);
   }
 
     async getAllManuals(
@@ -154,38 +151,4 @@ export class ManualService implements OnModuleInit {
         return 200;
     }
 
-    async checkAndSendMessage() {
-      const manuals = await this.manualRepository.find();
-      manuals.forEach(async (manual) => {
-        const { rwtime1, rwtime2, rctime, accumulated_time } = manual;
-        manual.accumulated_time + 1;
-        let rcval1 = manual.rcval1;
-        let rcval2 = manual.rcval2;
-        if (rwtime1 === 0 && rwtime2 === 0 && rctime === 0) {
-          rcval1 = 0;
-          rcval2 = 0;
-          // const Mqtt_payload = `{"device": "${manual.device}","rwtime1": "${manual.rwtime1}","rwtime2": "${manual.rwtime2}","rcval1": "${rcval1}","rcval2": "${rcval2}","rctime": "${manual.rctime}","accumulated_time": "${manual.accumulated_time}"}`
-          // await this.client.publish(`/valve_control/manual/${manual.device}`, Mqtt_payload,{qos : 1});
-        }
-        if (rwtime1 > 0 || rwtime2 > 0 || rctime > 0) {
-          const payload = {
-            device: manual.device,
-            rwtime1: rwtime1 > 0 ? rwtime1 - 1 : 0,
-            rwtime2: rwtime2 > 0 ? rwtime2 - 1 : 0,
-            rcval1,
-            rcval2,
-            rctime: rctime > 0 ? rctime - 1 : 0,
-            accumulated_time : manual.accumulated_time + 1
-          };
-          if (manual.accumulated_time % 60 === 0) {
-            manual.accumulated_time = 0; 
-            await this.manualRepository.update(manual.id, payload);
-          } else {
-
-          }
-          const Mqtt_payload = `{"device": "${manual.device}","rwtime1": "${payload.rwtime1}","rwtime2": "${payload.rwtime2}","rcval1": "${rcval1}","rcval2": "${rcval2}","rctime": "${payload.rctime}","accumulated_time": "${payload.accumulated_time}"}`
-          await this.client.publish(`/valve_control/manual/${manual.device}`, Mqtt_payload,{qos : 1});
-        }
-      });
-    }
 }
