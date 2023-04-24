@@ -64,6 +64,13 @@ export class ManualService implements OnModuleInit {
           console.log(`successfully subscribed to LOG`);
         }
       })
+      this.client.subscribe(`/valve_control/end/+`,(err)=>{
+        if (err) {
+          console.log(`error subscribing to END`, err);
+        } else {
+          console.log(`successfully subscribed to END`);
+        }
+      })
       this.client.subscribe(`/valve_control/error/+`,(err)=>{
         if (err) {
           console.log(`error subscribing to ERROR`, err);
@@ -71,10 +78,11 @@ export class ManualService implements OnModuleInit {
           console.log(`successfully subscribed to ERROR`);
         }
       })
+
     });
     
 
-    this.client.on('message', (topic, message) => {
+    this.client.on('message', async (topic, message) => {
       console.log(`Received a message on topic "${topic}": ${message.toString()}`);
       try {
         if (topic.startsWith('/valve_control/log/')) {
@@ -89,6 +97,28 @@ export class ManualService implements OnModuleInit {
           });
           this.client.publish(`/valve_control/check/${data.device}`, payload, { qos: 1 });
         }
+        if(topic.startsWith('/valve_control/end/')){
+          const data = JSON.parse(message.toString());
+          const device = data.device;
+          const manual = await this.manualRepository
+            .createQueryBuilder('manual')
+            .where('manual.device = :device', { device })
+            .getOne();
+          if (manual) {
+            console.log(manual)
+            manual.rwtime1 = 0;
+            manual.rwtime2 = 0;
+            manual.rcval1 = 0;
+            manual.rcval2 = 0;
+            manual.rctime = 0;
+            
+            console.log(manual)
+            await this.manualRepository.save(manual);
+          } else {
+            console.log(`Manual not found for device ${device}`);
+          }
+        }
+        
       } catch (err) {
         console.log(`Error parsing message data : ${err}`);
       }
@@ -150,5 +180,6 @@ export class ManualService implements OnModuleInit {
         await this.client.publish(`/valve_control/manual/${manual.device}`, Mqtt_payload,{qos : 1});
         return 200;
     }
+    
 
 }
