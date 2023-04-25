@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards,Delete } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards,Delete, Query } from "@nestjs/common";
 import { AccessTokenGuard } from "src/auth/guard/accessToken.guard";
 import { ManualService } from "./manual.service";
 import { CreateManualDto } from "./dto/create-manual.dto";
@@ -31,8 +31,8 @@ export class ManualController {
         return this.manualService.deleteManual(id);
     }
 
-    // @Get()
-    // showLogManual(@Req() req:Request):Promise<Manual_Entity[]>{
-    //     return this.manualService.showLogManual(req.user)
-    // }
+    @Get('/log')
+    showLogManual(@Query('device') device?: string):Promise<string>{
+        return this.manualService.showLogManual(device)
+    }
 }

@@ -22,6 +22,7 @@ export class ManualService implements OnModuleInit {
   private logFileName: string;
   private logStream: fs.WriteStream;
   private logSize: number;
+  private logPath = 'logs/mqtt.log';
 
   constructor(
     @InjectRepository(ManualRepository)
@@ -32,7 +33,7 @@ export class ManualService implements OnModuleInit {
     if (!fs.existsSync(LOG_DIR)) {
       fs.mkdirSync(LOG_DIR);
     }
-
+    console.log(this.logPath);
     this.logStream = fs.createWriteStream(LOG_FILE_PATH, { flags: 'a' });
     this.client = connect(`mqtt://${process.env.MQTT_HOST}:${process.env.MQTT_PORT}`, {
       clientId: process.env.MQTT_CLIENT_ID,
@@ -158,6 +159,25 @@ export class ManualService implements OnModuleInit {
       return manuals;
     }
 
+    async showLogManual(device?: string): Promise<string> {
+      const logs = await new Promise<string>((resolve, reject) => {
+        fs.readFile(this.logPath, { encoding: 'utf8' }, (err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data.toString());
+          }
+        });
+      });
+  
+      if (device) {
+        const regex = new RegExp(`\\b${device}\\b`, 'g');
+        return logs.match(regex).join('\n');
+      }
+  
+      return logs;
+    }
+
     createManual(createManualDto : CreateManualDto,user:{[key:string]:any}):Promise<Manual_Entity>{
         return this.manualRepository.createManual(createManualDto,user);
     }
@@ -168,7 +188,7 @@ export class ManualService implements OnModuleInit {
 
     async update(id:number,manual:Manual_Entity):Promise<number>{
         const update = await this.manualRepository.findOneBy({id});
-        update.device = manual.device; // 디바이스명은 바꿀 수 없어야하나?
+        update.device = manual.device;
         update.rwtime1 = manual.rwtime1;
         update.rwtime2 = manual.rwtime2;
         update.rcval1 = manual.rcval1;

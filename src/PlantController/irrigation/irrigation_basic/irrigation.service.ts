@@ -18,29 +18,7 @@ export class IrrigationService {
   constructor(
     @InjectRepository(IrrigationRepository)
     private irrigationRepository: IrrigationRepository,
-  ) {
-    this.natsClient = null;
-    //this.connectNats();
-  }
-
-  // async connectNats() {
-  //   const clusterId = 'cluster-name';
-  //   const clientId = 'client-id';
-  //   const natsUrl = 'http://localhost:8000';
-  
-  //   try {
-  //     this.natsClient = await connect(clusterId, clientId, { url: natsUrl });
-  //     console.log(`Connected to NATS at ${natsUrl} - irrigation`);
-  //     this.startSchedule();
-  //     this.natsClient.on('close', () => {
-  //       console.log(`Disconnected from NATS at ${natsUrl}`);
-  //       process.exit(1);
-  //     });
-  //   } catch (err) {
-  //     console.error(`NATS error: ${err}`);
-  //     process.exit(1);
-  //   }
-  // }
+  ) {}
 
   async getAllButtons(
     user: { [key: string]: any },
