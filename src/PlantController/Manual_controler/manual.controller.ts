@@ -31,8 +31,8 @@ export class ManualController {
         return this.manualService.deleteManual(id);
     }
 
-    @Get('/log')
-    showLogManual(@Query('device') device?: string):Promise<string>{
-        return this.manualService.showLogManual(device)
+    @Get('/log/:device')
+    async showLogManual(@Param('device') device:string):Promise<string>{
+        return await this.manualService.showLogManual(device);
     }
 }

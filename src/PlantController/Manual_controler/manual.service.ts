@@ -22,7 +22,7 @@ export class ManualService implements OnModuleInit {
   private logFileName: string;
   private logStream: fs.WriteStream;
   private logSize: number;
-  private logPath = 'logs/mqtt.log';
+  private logPath = 'log/mqtt.log';
 
   constructor(
     @InjectRepository(ManualRepository)
@@ -160,22 +160,9 @@ export class ManualService implements OnModuleInit {
     }
 
     async showLogManual(device?: string): Promise<string> {
-      const logs = await new Promise<string>((resolve, reject) => {
-        fs.readFile(this.logPath, { encoding: 'utf8' }, (err, data) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(data.toString());
-          }
-        });
-      });
-  
-      if (device) {
-        const regex = new RegExp(`\\b${device}\\b`, 'g');
-        return logs.match(regex).join('\n');
-      }
-  
-      return logs;
+      const data = await fs.promises.readFile(this.logPath,'utf-8');
+      const logs = device ? data.split('\n').filter(log => log.includes(device)) : data.split('\n');
+      return logs.join('\n');
     }
 
     createManual(createManualDto : CreateManualDto,user:{[key:string]:any}):Promise<Manual_Entity>{
