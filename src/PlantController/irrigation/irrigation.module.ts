@@ -6,9 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { IrrigationController } from './irrigation.controller';
 import { IrrigationService } from './irrigation_basic/irrigation.service';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ManualModule } from '../Manual_controler/manual.module';
 
 @Module({
   imports : [
+    ManualModule,
     TypeOrmModule.forFeature([IrrigationRepository,Irrigation_mRepository]),
     ScheduleModule.forRoot(),
   ],

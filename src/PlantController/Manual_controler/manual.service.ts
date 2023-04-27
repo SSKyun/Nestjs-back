@@ -29,20 +29,23 @@ export class ManualService implements OnModuleInit {
     private manualRepository: ManualRepository,
   ) {}
 
+  public getMqttClient(): MqttClient{
+    return this.client;
+  }
+
   async onModuleInit() {
     if (!fs.existsSync(LOG_DIR)) {
       fs.mkdirSync(LOG_DIR);
     }
     console.log(this.logPath);
     this.logStream = fs.createWriteStream(LOG_FILE_PATH, { flags: 'a' });
-    this.client = connect(`mqtt://${process.env.MQTT_HOST}:${process.env.MQTT_PORT}`, {
+    this.client = connect(`mqtt://${process.env.MQTT_HOST}:${process.env.MQTT_PORT}`, { // 스케줄 관리에서도 이렇게 똑같이 사용하면 됨.
       clientId: process.env.MQTT_CLIENT_ID,
       username: process.env.MQTT_USER_NAME,
       password: process.env.MQTT_PASSWORD,
       protocol: 'mqtt',
       rejectUnauthorized: false,
     });
-
     this.client.on('connect', () => {
       this.client.subscribe('MQTT SERVER', (err) => {
         if (err) {

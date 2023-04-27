@@ -1,6 +1,6 @@
 import { Irrigation_m } from 'src/PlantController/irrigation/irrigation_manually/irrigation_m.entity';
 import { Create_mButtonDto } from '../dto/create-mbutton.dto';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IrrigationEntity } from './irrigation.entity';
@@ -9,16 +9,24 @@ import { Request } from 'express';
 import { firstValueFrom, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { IrrigationRepository } from './irrigation.repository';
-import { connect, Stan } from 'node-nats-streaming';
+import { MqttClient, connect } from 'mqtt';
+import { ManualService } from 'src/PlantController/Manual_controler/manual.service';
 
 @Injectable()
-export class IrrigationService {
-  private natsClient: Stan;
+export class IrrigationService{
 
   constructor(
     @InjectRepository(IrrigationRepository)
     private irrigationRepository: IrrigationRepository,
+    private readonly manualService : ManualService,
   ) {}
+
+ async test():Promise<void>{
+  const mqttClient = this.manualService.getMqttClient();
+  mqttClient.on('connect',()=>{
+    console.log("Test");
+  });
+ }
 
   async getAllButtons(
     user: { [key: string]: any },

@@ -11,6 +11,7 @@ import { ManualService } from "./manual.service";
         AuthModule
     ],
     controllers :[ManualController],
-    providers:[ManualService,ManualRepository]
+    providers:[ManualService,ManualRepository],
+    exports:[ManualService]
 })
 export class ManualModule {}
