@@ -21,12 +21,19 @@ export class IrrigationService{
     private readonly manualService : ManualService,
   ) {}
 
- async test():Promise<void>{
-  const mqttClient = this.manualService.getMqttClient();
-  mqttClient.on('connect',()=>{
-    console.log("Test");
-  });
- }
+  async test():Promise<void>{
+    const mqttClient = this.manualService.getMqttClient();
+    mqttClient.on('connect',()=>{
+      console.log("Test");
+      mqttClient.subscribe('MQTT Schedule',(err)=>{
+        if(err){
+          console.log(`error subscribing to MQTT Schedule SERVER`,err);
+        }else{
+          console.log('successfully subscribed to MQTT SerVer');
+        }
+      })
+    });
+  }
 
   async getAllButtons(
     user: { [key: string]: any },
