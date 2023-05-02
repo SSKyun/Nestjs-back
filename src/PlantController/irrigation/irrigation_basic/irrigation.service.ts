@@ -13,27 +13,28 @@ import { MqttClient, connect } from 'mqtt';
 import { ManualService } from 'src/PlantController/Manual_controler/manual.service';
 
 @Injectable()
-export class IrrigationService{
-
+export class IrrigationService implements OnModuleInit{
   constructor(
     @InjectRepository(IrrigationRepository)
     private irrigationRepository: IrrigationRepository,
     private readonly manualService : ManualService,
   ) {}
 
-  async test():Promise<void>{
-    const mqttClient = this.manualService.getMqttClient();
-    mqttClient.on('connect',()=>{
-      console.log("Test");
-      mqttClient.subscribe('MQTT Schedule',(err)=>{
-        if(err){
-          console.log(`error subscribing to MQTT Schedule SERVER`,err);
-        }else{
-          console.log('successfully subscribed to MQTT SerVer');
-        }
-      })
-    });
+  async onModuleInit() {
+    const mqttClient = this.manualService.client;
+    console.log(mqttClient);
+    // mqttClient.on('connect',()=>{
+    //   console.log("test");
+    //   mqttClient.subscribe("MQTT Schedule",(err)=>{
+    //     if(err){
+    //       console.log('error Mqtt schedule SERVER',err);
+    //     }else{
+    //       console.log('successfully subscribed to MQTT Schedule');
+    //     }
+    //   })
+    // });
   }
+
 
   async getAllButtons(
     user: { [key: string]: any },

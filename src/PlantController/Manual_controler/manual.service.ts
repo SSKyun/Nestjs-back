@@ -17,13 +17,12 @@ const LOG_FILE_PATH = path.join(LOG_DIR, LOG_FILE_NAME);
 
 @Injectable()
 export class ManualService implements OnModuleInit {
-  private client: MqttClient;
+  client: MqttClient;
   private intervalId: NodeJS.Timeout;
   private logFileName: string;
   private logStream: fs.WriteStream;
   private logSize: number;
   private logPath = 'log/mqtt.log';
-
   constructor(
     @InjectRepository(ManualRepository)
     private manualRepository: ManualRepository,
@@ -34,10 +33,10 @@ export class ManualService implements OnModuleInit {
   }
 
   async onModuleInit() {
+    console.log(this.client);
     if (!fs.existsSync(LOG_DIR)) {
       fs.mkdirSync(LOG_DIR);
     }
-    console.log(this.logPath);
     this.logStream = fs.createWriteStream(LOG_FILE_PATH, { flags: 'a' });
     this.client = connect(`mqtt://${process.env.MQTT_HOST}:${process.env.MQTT_PORT}`, { // 스케줄 관리에서도 이렇게 똑같이 사용하면 됨.
       clientId: process.env.MQTT_CLIENT_ID,
