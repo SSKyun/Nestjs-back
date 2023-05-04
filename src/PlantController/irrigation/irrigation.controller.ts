@@ -18,6 +18,11 @@ export class IrrigationController {
     constructor(private irrigationService: IrrigationService,
         private irrigation_mService : Irrigation_mService) { }
 
+    @Get('test')
+    test(){
+        return this.irrigationService.sendMessage();
+    }
+
     @Post('schedule')
     async startSchedule(): Promise<void> {
         await this.irrigationService.startSchedule();

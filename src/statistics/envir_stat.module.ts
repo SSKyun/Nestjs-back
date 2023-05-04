@@ -12,7 +12,8 @@ import { EnvirService } from "./envir_stat.service";
         AuthModule
     ],
     controllers : [EnvirController],
-    providers : [EnvirService,EnvirRepository]
+    providers : [EnvirService,EnvirRepository],
+    exports:[EnvirRepository]
 })
 
 export class EnvirModule {}

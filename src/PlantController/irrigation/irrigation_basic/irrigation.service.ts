@@ -13,28 +13,23 @@ import { MqttClient, connect } from 'mqtt';
 import { ManualService } from 'src/PlantController/Manual_controler/manual.service';
 
 @Injectable()
-export class IrrigationService implements OnModuleInit{
+export class IrrigationService{
   constructor(
     @InjectRepository(IrrigationRepository)
     private irrigationRepository: IrrigationRepository,
-    private readonly manualService : ManualService,
+    private manualService : ManualService,
   ) {}
 
-  async onModuleInit() {
-    const mqttClient = this.manualService.client;
-    console.log(mqttClient);
-    // mqttClient.on('connect',()=>{
-    //   console.log("test");
-    //   mqttClient.subscribe("MQTT Schedule",(err)=>{
-    //     if(err){
-    //       console.log('error Mqtt schedule SERVER',err);
-    //     }else{
-    //       console.log('successfully subscribed to MQTT Schedule');
-    //     }
-    //   })
-    // });
+  sendMessage() {
+    this.manualService.publish('/test',`{"device": "test"}`)
+    console.log('Schedule MQTT 메세지 보냄')
   }
-
+  
+  getMessage() {
+    this.manualService.subscribe('/test',(message)=>{
+      console.log('Received Message',message);
+    })
+  }
 
   async getAllButtons(
     user: { [key: string]: any },
@@ -117,7 +112,6 @@ export class IrrigationService implements OnModuleInit{
         const startMinute: number = Number(irrigation.s_min);
         let onoff = irrigation.onoff || false;
         let accumulatedTime = irrigation.accumulated_time;
-        
 
         if (
           daysOfWeek[currentDayOfWeek] &&

@@ -1,3 +1,5 @@
+import { EnvirRepository } from './../../statistics/envir_stat.repository';
+import { EnvirService } from './../../statistics/envir_stat.service';
 import { CreateManualDto } from './dto/create-manual.dto';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -26,14 +28,20 @@ export class ManualService implements OnModuleInit {
   constructor(
     @InjectRepository(ManualRepository)
     private manualRepository: ManualRepository,
+    private envirRepository : EnvirRepository,
   ) {}
 
-  public getMqttClient(): MqttClient{
-    return this.client;
+  public initMqttClient(): MqttClient{
+    return this.client = connect(`mqtt://${process.env.MQTT_HOST}:${process.env.MQTT_PORT}`, {
+      clientId: process.env.MQTT_CLIENT_ID,
+      username: process.env.MQTT_USER_NAME,
+      password: process.env.MQTT_PASSWORD,
+      protocol: 'mqtt',
+      rejectUnauthorized: false,
+    });
   }
 
   async onModuleInit() {
-    console.log(this.client);
     if (!fs.existsSync(LOG_DIR)) {
       fs.mkdirSync(LOG_DIR);
     }
@@ -121,6 +129,9 @@ export class ManualService implements OnModuleInit {
             console.log(`Manual not found for device ${device}`);
           }
         }
+        if(topic.startsWith('valve_control/envir/')){
+          // 
+        }
         
       } catch (err) {
         console.log(`Error parsing message data : ${err}`);
@@ -149,7 +160,16 @@ export class ManualService implements OnModuleInit {
         }
       }
     });
+  }
 
+  publish(topic:string,message:string){
+    this.client.publish(topic,message);
+  }
+  subscribe(topic:string,callback:(message:string)=>void){
+    this.client.subscribe(topic);
+    this.client.on('message',(topic,message)=>{
+      callback(message.toString());
+    });
   }
 
     async getAllManuals(
@@ -185,7 +205,7 @@ export class ManualService implements OnModuleInit {
         update.rctime = manual.rctime;
 
         await this.manualRepository.save(update);
-        const Mqtt_payload = `{"device": "${manual.device}","rwtime1": "${manual.rwtime1}","rwtime2": "${manual.rwtime2}","rcval1": "${manual.rcval1}","rcval2": "${manual.rcval2}","rctime": "${manual.rctime}","accumulated_time": "${manual.accumulated_time}"}`
+        const Mqtt_payload = `{"device": "${manual.device}","rwtime1": "${manual.rwtime1}","rwtime2": "${manual.rwtime2}","rcval1": "${manual.rcval1}","rcval2": "${manual.rcval2}","rctime": "${manual.rctime}"}`
         await this.client.publish(`/valve_control/manual/${manual.device}`, Mqtt_payload,{qos : 1});
         return 200;
     }
