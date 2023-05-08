@@ -1,3 +1,4 @@
+import { CreateEnvirDto } from './../../statistics/dto/create-envir.dto';
 import { EnvirRepository } from './../../statistics/envir_stat.repository';
 import { EnvirService } from './../../statistics/envir_stat.service';
 import { CreateManualDto } from './dto/create-manual.dto';
@@ -28,6 +29,7 @@ export class ManualService implements OnModuleInit {
   constructor(
     @InjectRepository(ManualRepository)
     private manualRepository: ManualRepository,
+
     private envirRepository : EnvirRepository,
   ) {}
 
@@ -130,7 +132,16 @@ export class ManualService implements OnModuleInit {
           }
         }
         if(topic.startsWith('valve_control/envir/')){
-          // 
+          const createEnvirDto:CreateEnvirDto = {
+            temperature : 20,
+            humidity: 30,
+            soil_humid: 40,
+            grow: 10,
+            precipitaion: null,
+            insolation: null,
+          };
+          const user = { sub : '' };
+          this.envirRepository.createEnvir(createEnvirDto,user);
         }
         
       } catch (err) {
